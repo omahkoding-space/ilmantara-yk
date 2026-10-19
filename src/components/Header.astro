@@ -1,0 +1,195 @@
+---
+import Logo from "./Logo.astro";
+import { WHATSAPP_LINK } from "../lib/site";
+
+const NAV_LINKS = [
+  { label: "Beranda", to: "/" },
+  { label: "Portofolio", to: "/work/" },
+  { label: "Tentang", to: "/#about" },
+  { label: "Layanan", to: "/#services" },
+  { label: "Jurnal", to: "/journal/" },
+  { label: "Permainan", to: "/#playground" },
+];
+
+const VIEWERS = [
+  { name: "Dimas", initials: "D", color: "rgb(var(--color-mara-rgb))", textColor: "#0C0C0E" },
+  { name: "Tegar", initials: "T", color: "rgb(var(--color-theo-rgb))", textColor: "#0C0C0E" },
+  { name: "Natan", initials: "N", color: "rgb(var(--color-accent-rgb))", textColor: "#fff" },
+  { name: "Dana", initials: "D", color: "rgb(var(--color-flow-rgb))", textColor: "#0C0C0E" },
+  { name: "Nafis", initials: "N", color: "rgb(138,138,144)", textColor: "#0C0C0E" },
+];
+
+const currentPath = new URL(Astro.request.url).pathname;
+
+const LINKS = NAV_LINKS;
+---
+
+<nav
+  data-nav
+  transition:persist="site-header"
+  class="fixed inset-x-0 top-0 z-20 flex w-full flex-col border-b border-ink/10 bg-paper/90 backdrop-blur-md"
+  style="background-color: rgba(250,250,248,0.9)"
+>
+  <div class="flex h-14 w-full items-center justify-between pl-4 pr-[14px]">
+    <Logo />
+
+    <div class="hidden items-center gap-0.5 rounded-[10px] bg-ink/5 p-[3px] lg:flex">
+      {LINKS.map((link) => {
+        const isActive = link.to === "/" ? currentPath === "/" : currentPath.startsWith(link.to);
+        return (
+          <a
+            href={link.to}
+            title={link.label}
+            data-nav-link={link.to}
+            class={`flex h-[30px] items-center rounded-[7px] px-3 text-[13px] font-medium transition-colors ${
+              isActive ? "text-ink" : "text-ink/[.62] hover:text-ink"
+            }`}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </div>
+
+    <div class="flex items-center gap-[10px]">
+      <div class="hidden items-center lg:flex">
+        {VIEWERS.map((viewer) => (
+          <span
+            class="group relative flex"
+          >
+            <span
+              class="flex h-[26px] w-[26px] items-center justify-center rounded-full border-2 text-[10px] font-semibold"
+              style={{ backgroundColor: viewer.color, color: viewer.textColor, borderColor: "rgb(250,250,248)" }}
+            >
+              {viewer.initials}
+            </span>
+            <span class="pointer-events-none absolute left-1/2 top-[calc(100%+6px)] z-30 -translate-x-1/2 whitespace-nowrap rounded-md bg-ink px-1.5 py-0.5 text-[10px] font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              {viewer.name}
+            </span>
+          </span>
+        ))}
+      </div>
+      <a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener"
+        title="Konsultasi Gratis via WhatsApp"
+        class="hidden h-[34px] items-center rounded-[9px] bg-ink px-3.5 text-[13px] font-medium text-white lg:flex"
+      >
+        Konsultasi Gratis
+      </a>
+      <button
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        class="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] bg-ink lg:hidden"
+      >
+        <span class="sr-only">Buka menu</span>
+        <span class="relative h-4 w-4">
+          <span
+            data-nav-bar1
+            aria-hidden="true"
+            class="absolute left-0 top-[5px] h-[2px] w-4 bg-white transition-[top,transform] duration-500"
+            style="transition-timing-function: cubic-bezier(.22,1,.36,1)"
+          />
+          <span
+            data-nav-bar2
+            aria-hidden="true"
+            class="absolute left-0 top-[9px] h-[2px] w-4 bg-white transition-[top,transform] duration-500"
+            style="transition-timing-function: cubic-bezier(.22,1,.36,1)"
+          />
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="mobile-nav-drawer"
+    data-nav-drawer
+    class="max-h-0 overflow-hidden opacity-0 transition-[max-height,opacity] duration-500 ease-out lg:hidden"
+  >
+    <div class="flex flex-col gap-1 px-4 pb-2 pt-3">
+      {LINKS.map((link, i) => {
+        const isActive = link.to === "/" ? currentPath === "/" : currentPath.startsWith(link.to);
+        return (
+          <a
+            href={link.to}
+            title={link.label}
+            data-nav-link={link.to}
+            class={`flex items-center justify-between rounded-[10px] px-2 py-2.5 text-[20px] font-semibold tracking-[-0.02em] ${
+              isActive ? "text-ink" : "text-ink/[.62]"
+            }`}
+          >
+            <span>{link.label}</span>
+            <span class="font-mono text-xs text-accent">{String(i + 1).padStart(2, "0")}</span>
+          </a>
+        );
+      })}
+    </div>
+    <div class="px-4 pb-5">
+      <a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener"
+        title="Konsultasi Gratis via WhatsApp"
+        class="flex h-[50px] w-full items-center justify-center rounded-[10px] bg-accent text-[14px] font-medium text-white"
+      >
+        Konsultasi Gratis
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.querySelectorAll("[data-nav]").forEach((nav) => {
+    // The nav persists across client-side page transitions
+    // (transition:persist="site-header"), so this script tag re-executes on
+    // every navigation while the <nav> itself stays mounted — bind the
+    // drawer toggle once and just skip it on later runs.
+    if (!(nav instanceof HTMLElement) || !nav.dataset.navBound) {
+      const toggle = nav.querySelector("[data-nav-toggle]");
+      const drawer = nav.querySelector("[data-nav-drawer]");
+      const bar1 = nav.querySelector("[data-nav-bar1]");
+      const bar2 = nav.querySelector("[data-nav-bar2]");
+      if (toggle && drawer) {
+        let open = false;
+        const setOpen = (next) => {
+          open = next;
+          toggle.setAttribute("aria-expanded", String(open));
+          drawer.classList.toggle("max-h-[420px]", open);
+          drawer.classList.toggle("max-h-0", !open);
+          drawer.classList.toggle("opacity-100", open);
+          drawer.classList.toggle("opacity-0", !open);
+          if (bar1 instanceof HTMLElement) {
+            bar1.style.top = open ? "7px" : "5px";
+            bar1.style.transform = open ? "rotate(45deg)" : "rotate(0deg)";
+          }
+          if (bar2 instanceof HTMLElement) {
+            bar2.style.top = open ? "7px" : "9px";
+            bar2.style.transform = open ? "rotate(-45deg)" : "rotate(0deg)";
+          }
+        };
+        toggle.addEventListener("click", () => setOpen(!open));
+        drawer.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 1024 && open) setOpen(false);
+        });
+      }
+      if (nav instanceof HTMLElement) nav.dataset.navBound = "true";
+    }
+
+    // The active-link highlight is otherwise computed server-side from the
+    // request URL, which never re-runs for a persisted nav — recompute it
+    // here each time this script re-executes after a client-side swap.
+    const { pathname } = window.location;
+    nav.querySelectorAll("[data-nav-link]").forEach((a) => {
+      if (!(a instanceof HTMLElement)) return;
+      const to = a.dataset.navLink || "";
+      const isActive = to === "/" ? pathname === "/" : to.startsWith("/#") ? false : pathname.startsWith(to);
+      a.classList.toggle("text-ink", isActive);
+      a.classList.toggle("text-ink/[.62]", !isActive);
+      a.classList.toggle("hover:text-ink", !isActive);
+    });
+  });
+</script>

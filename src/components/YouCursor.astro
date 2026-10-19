@@ -1,0 +1,65 @@
+---
+// Global floating "You" badge — native cursor stays untouched, this pill
+// just follows the mouse site-wide with a small offset.
+---
+
+<div id="you-cursor" transition:persist class="pointer-events-none fixed left-0 top-0 z-[9999] hidden" style="will-change: transform;">
+  <div
+    class="whitespace-nowrap text-[10px] font-medium leading-none text-white"
+    style="background: rgb(var(--color-accent-rgb)); letter-spacing: -0.01em; padding: 3px 6px; border-radius: 2px 6px 6px 6px; box-shadow: 0 3px 8px rgba(0,0,0,.12);"
+  >
+    You
+  </div>
+</div>
+
+<script>
+  function init() {
+    const cursor = document.getElementById("you-cursor");
+    if (!cursor) return;
+    // No floating badge on touch / coarse pointers.
+    if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
+
+    const OFFSET_X = 8;
+    const OFFSET_Y = 12;
+    let x = 0;
+    let y = 0;
+    let visible = false;
+    let inHero = false;
+    let raf = 0;
+
+    function render() {
+      raf = 0;
+      cursor.style.transform = `translate3d(${x + OFFSET_X}px, ${y + OFFSET_Y}px, 0)`;
+      // The hero paints its own "You" cursor (wordmark editor feedback),
+      // so the global pill stays out of the way while inside #ha-container
+      // — otherwise the two overlap and read as a double cursor.
+      cursor.classList.toggle("hidden", !visible || inHero);
+    }
+    function schedule() {
+      if (!raf) raf = requestAnimationFrame(render);
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      visible = true;
+      inHero = e.target instanceof Element && !!e.target.closest("#ha-container");
+      schedule();
+    });
+    document.addEventListener("mouseleave", () => {
+      visible = false;
+      schedule();
+    });
+    document.addEventListener("mouseenter", () => {
+      visible = true;
+      schedule();
+    });
+    // Hide while leaving the window entirely.
+    document.documentElement.addEventListener("mouseleave", () => {
+      visible = false;
+      schedule();
+    });
+  }
+
+  init();
+</script>

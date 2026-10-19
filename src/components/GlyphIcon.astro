@@ -1,0 +1,32 @@
+---
+// Inline icon set replacing the old text-glyph marks (→ ↗ ◇ ▣).
+//
+// The Geist Latin subset does not carry those codepoints, so they used to
+// render via the OS fallback font and, worse, forced the browser to download a
+// ~27 KB "Inter" face purely to probe for glyphs it also lacks. Drawing them
+// from the icon set keeps them deterministic and removes that request.
+import { ArrowRight, ArrowUpRight, Diamond, Square } from "lucide-astro";
+
+const ICONS = {
+  /** → link arrow */
+  right: ArrowRight,
+  /** ↗ external-link arrow */
+  upRight: ArrowUpRight,
+  /** ◇ accent marker */
+  diamond: Diamond,
+  /** ▣ filled-frame marker */
+  square: Square,
+} as const;
+
+const { name, class: cls = "" } = Astro.props as {
+  name: keyof typeof ICONS;
+  class?: string;
+};
+
+const Icon = ICONS[name];
+---
+
+<Icon
+  class:list={["inline-block h-[1em] w-[1em] shrink-0 align-[-0.125em]", cls]}
+  aria-hidden="true"
+/>

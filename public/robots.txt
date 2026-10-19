@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ilmantara-yk.danamifkhakunnurkhasan.workers.dev/sitemap-index.xml

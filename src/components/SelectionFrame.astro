@@ -1,0 +1,8 @@
+---
+interface Props { size?: number }
+const { size = 8 } = Astro.props;
+const points = [[0,0],[50,0],[100,0],[100,50],[100,100],[50,100],[0,100],[0,50]];
+---
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 border-[1.5px] border-[#4B3BFF]">
+  {points.map(([x,y]) => <span class="absolute border-[1.5px] border-[#4B3BFF] bg-white" style={{left:`${x}%`,top:`${y}%`,width:`${size}px`,height:`${size}px`,marginLeft:`${-size/2}px`,marginTop:`${-size/2}px`}} />)}
+</div>

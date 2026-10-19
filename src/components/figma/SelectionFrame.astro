@@ -1,0 +1,39 @@
+---
+// Figma selection overlay: a 1.5px accent outline with eight white resize
+// handles, plus an optional accent dimension chip. Drop inside any
+// `relative` container (the outline spans the container).
+interface Props {
+  /** Text for the dimension chip (e.g. "1440 × 720"). Omit to hide it. */
+  label?: string;
+  class?: string;
+}
+
+const { label, class: className = "" } = Astro.props;
+
+const HANDLES = [
+  "left-0 top-0",
+  "left-1/2 top-0",
+  "left-full top-0",
+  "left-full top-1/2",
+  "left-full top-full",
+  "left-1/2 top-full",
+  "left-0 top-full",
+  "left-0 top-1/2",
+];
+---
+
+<div class:list={["pointer-events-none absolute inset-0 z-10", className]} aria-hidden="true">
+  <span class="absolute inset-0 border-[1.5px] border-accent"></span>
+  {
+    HANDLES.map((pos) => (
+      <span class:list={[pos, "absolute h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"]} />
+    ))
+  }
+  {
+    label && (
+      <span class="absolute -bottom-3.5 left-1/2 -translate-x-1/2 rounded-[4px] bg-accent px-2 py-1 font-mono text-[11px] font-medium leading-none whitespace-nowrap text-white">
+        {label}
+      </span>
+    )
+  }
+</div>

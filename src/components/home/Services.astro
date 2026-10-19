@@ -1,0 +1,279 @@
+---
+import ArrowRow from "../ArrowRow.astro";
+// Static content — CMS integration removed, edit directly here.
+// Grid: 1 column on mobile, 2 on tablet (md) and desktop (lg).
+const services = [
+  {
+    title: "Website Bisnis",
+    description:
+      "Jasa pembuatan website di Jogja untuk perusahaan dan UMKM. Hadirkan bisnis Anda secara profesional melalui website yang responsif, cepat, dan siap dioptimasi untuk mesin pencari.",
+    features: [
+      "Profil perusahaan",
+      "Desain responsif",
+      "SEO teknis dasar",
+      "Pengelolaan konten",
+    ],
+    href: "/jasa-pembuatan-website-jogja/",
+    linkLabel: "Jasa pembuatan website",
+    price: "Rp4,9 juta",
+  },
+  {
+    title: "Landing Page",
+    description:
+      "Landing page untuk promosi produk, layanan, dan kampanye iklan. Susun informasi secara terarah agar calon pelanggan lebih mudah memahami penawaran dan menghubungi bisnis Anda.",
+    features: [
+      "Desain fokus konversi",
+      "Copywriting terarah",
+      "Integrasi WhatsApp",
+      "Formulir prospek",
+    ],
+    href: "/jasa-landing-page/",
+    linkLabel: "Jasa landing page",
+    price: "Rp2,9 juta",
+  },
+  {
+    title: "Shopify Development",
+    description:
+      "Bangun dan kembangkan toko Shopify dengan tampilan sesuai identitas brand. Mulai dari setup toko dan custom theme hingga integrasi serta aplikasi khusus untuk kebutuhan bisnis.",
+    features: [
+      "Setup toko Shopify",
+      "Kustomisasi theme",
+      "Integrasi pihak ketiga",
+      "Pengembangan aplikasi khusus",
+    ],
+    href: "/jasa-shopify/",
+    linkLabel: "Jasa Shopify",
+    price: "Rp7,9 juta",
+  },
+  {
+    title: "Aplikasi Web Custom",
+    description:
+      "Jasa pembuatan aplikasi web untuk menyederhanakan operasional bisnis. Kami mengembangkan dashboard, sistem internal, dan integrasi API menggunakan teknologi yang sesuai dengan kebutuhan Anda.",
+    features: [
+      "Dashboard bisnis",
+      "Sistem internal",
+      "API dan database",
+      "Hak akses pengguna",
+    ],
+    href: "/jasa-pembuatan-aplikasi-web/",
+    linkLabel: "Jasa aplikasi web",
+    price: "Rp15 juta",
+  },
+  {
+    title: "Automasi AI",
+    description:
+      "Kurangi pekerjaan berulang dengan automasi AI yang terhubung ke proses bisnis Anda. Dari chatbot berbasis data produk hingga integrasi sistem dan otomatisasi alur kerja.",
+    features: [
+      "Chatbot berbasis data",
+      "Automasi alur kerja",
+      "Integrasi API",
+      "Pemrosesan informasi",
+    ],
+    href: "/jasa-automasi-ai/",
+    linkLabel: "Jasa automasi AI",
+    price: "Rp3,9 juta",
+  },
+];
+
+const CARDS = services.map((s, i) => ({
+  index: String(i + 1).padStart(2, "0"),
+  title: s.title,
+  desc: s.description ?? "",
+  bullets: s.features ?? [],
+  href: s.href ?? "",
+  linkLabel: s.linkLabel ?? "Pelajari",
+  price: s.price ?? "",
+}));
+
+const COUNT_LABEL = "Lima";
+---
+
+<section id="services" data-framer-name="06 Services" data-services class="w-full scroll-mt-14 overflow-x-clip bg-paper text-ink">
+  <div class="mx-auto max-w-[1312px] px-5 py-[88px] md:px-8 md:py-[110px] lg:px-16">
+    <div
+      data-services-head
+      data-seen="false"
+      class="grid items-end gap-12 transition duration-700 data-[seen=false]:translate-y-[18px] data-[seen=false]:opacity-0 data-[seen=false]:blur-[4px] lg:grid-cols-[1fr_420px]"
+    >
+      <div>
+        <p class="flex items-center gap-2.5 font-mono text-[11px] font-medium capitalize tracking-[0.05em] text-ink/65">
+          <b class="font-medium text-accent"># Ilmantara /</b> Layanan
+        </p>
+        <h2 class="mt-[18px] max-w-[720px] text-balance text-[64px] font-semibold leading-[0.96] tracking-[-0.055em]">
+          Layanan Software House Kami
+        </h2>
+      </div>
+      <div>
+      </div>
+    </div>
+
+    <div data-services-track class="relative mt-16 w-full lg:mt-24">
+      <div data-services-cards class="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-x-[76px] md:gap-y-[88px] xl:grid-cols-3 xl:items-start">
+        {CARDS.map((service, si) => (
+          <div
+            data-service-card
+            class={`group/card relative flex min-h-[430px] flex-col rounded-2xl border border-ink/[0.09] bg-white p-5 pb-[22px] text-ink no-underline shadow-[0_26px_50px_-38px_rgba(12,12,14,0.55)] transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1.5 hover:border-accent hover:shadow-[0_40px_70px_-40px_rgba(12,12,14,0.6)] ${["", "xl:mt-[110px]", "xl:mt-[24px]", "xl:mt-[134px]", "xl:mt-[60px]"][si % 5]}`}
+          >
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs font-medium text-accent">({service.index})</span>
+            </div>
+            <h3 class="mt-[22px] text-[30px] font-semibold leading-[1.02] tracking-[-0.045em]">{service.title}</h3>
+            {service.desc && <p class="mt-3 text-[15px] leading-[1.5] text-ink/70">{service.desc}</p>}
+            {service.bullets.length > 0 && (
+              <div class="mt-5 flex flex-col gap-1.5">
+                {service.bullets.map((bullet) => (
+                  <span class="flex items-center gap-2 rounded-lg bg-ink/[0.04] px-2.5 py-[9px] text-[13px] font-medium">
+                    <i class="h-1.5 w-1.5 rounded-full bg-accent"></i>{bullet}
+                  </span>
+                ))}
+              </div>
+            )}
+            <ArrowRow
+              href={service.href}
+              label={`Mulai dari ${service.price}`}
+              class={service.price ? "mt-3" : "mt-auto"}
+            />
+          </div>
+        ))}
+      </div>
+      <svg
+        data-services-svg
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 overflow-visible"
+      ></svg>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initServices() {
+    const ACCENT = "#4B3BFF";
+    const NS = "http://www.w3.org/2000/svg";
+    const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+    const inOut = (e) => (e < 0.5 ? 8 * e * e * e * e : 1 - (-2 * e + 2) ** 4 / 2);
+    const reduced = () =>
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.querySelectorAll("[data-services]").forEach((section) => {
+      const head = section.querySelector("[data-services-head]");
+      const track = section.querySelector("[data-services-track]");
+      const svg = section.querySelector("[data-services-svg]");
+      const cards = [...section.querySelectorAll("[data-service-card]")];
+      const n = cards.length;
+      if (!track || !svg || n === 0) return;
+      const reduceMotion = reduced();
+      const denom = Math.max(1, n - 1);
+      let hovered = -1;
+      let W = 0;
+
+      // Connectors: plain S-curve lines only — no arrowheads, no dots,
+      // no floating labels. They draw on scroll at every breakpoint.
+      const links = [];
+      for (let i = 0; i < n - 1; i++) {
+        const path = document.createElementNS(NS, "path");
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", ACCENT);
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("pathLength", "1");
+        path.setAttribute("stroke-dasharray", "1 1");
+        path.style.transition = "stroke-width .25s";
+        svg.appendChild(path);
+        links.push({ path });
+      }
+
+      cards.forEach((card, t) => {
+        card.addEventListener("mouseenter", () => { hovered = t; paint(); });
+        card.addEventListener("mouseleave", () => { hovered = -1; paint(); });
+      });
+
+      function layout() {
+        const T = track.getBoundingClientRect();
+        svg.setAttribute("width", String(track.offsetWidth));
+        svg.setAttribute("height", String(track.offsetHeight));
+        const R = (el) => {
+          const r = el.getBoundingClientRect();
+          return {
+            left: r.left - T.left,
+            right: r.right - T.left,
+            top: r.top - T.top,
+            bottom: r.bottom - T.top,
+            cx: (r.left + r.right) / 2 - T.left,
+            cy: (r.top + r.bottom) / 2 - T.top,
+          };
+        };
+        links.forEach((L, t) => {
+          const A = R(cards[t]);
+          const B = R(cards[t + 1]);
+          let d;
+          if (B.cx >= A.cx + 40) {
+            // Next card sits to the right (same grid row): horizontal S-curve.
+            const x0 = A.right, y0 = A.cy, x1 = B.left, y1 = B.cy;
+            const dx = Math.min(80, Math.max(24, (x1 - x0) / 2));
+            d = `M${x0} ${y0} C ${x0 + dx} ${y0}, ${x1 - dx} ${y1}, ${x1 - 2} ${y1}`;
+          } else {
+            // Next card wraps below (new row, or single column): vertical S-curve.
+            const x0 = A.cx, y0 = A.bottom, x1 = B.cx, y1 = B.top;
+            const dy = Math.min(90, Math.max(28, (y1 - y0) / 2));
+            d = `M${x0} ${y0} C ${x0} ${y0 + dy}, ${x1} ${y1 - dy}, ${x1} ${y1 - 2}`;
+          }
+          L.path.setAttribute("d", d);
+        });
+        paint();
+      }
+
+      function paint() {
+        links.forEach((L, t) => {
+          const u = clamp(W * denom - t);
+          const hot = hovered === t || hovered === t + 1;
+          L.path.style.strokeDashoffset = String(1 - u);
+          L.path.setAttribute("stroke-width", hot ? "3" : "2");
+        });
+        cards.forEach((c, t) => {
+          const u = t === 0 ? 1 : clamp(W * denom - (t - 1));
+          c.style.opacity = String(0.25 + 0.75 * u);
+        });
+      }
+
+      function measure() {
+        if (reduceMotion) { W = 1; paint(); return; }
+        const r = track.getBoundingClientRect();
+        const vh = window.innerHeight || 900;
+        const raw = (vh - r.top) / (vh + r.height);
+        W = inOut(clamp((raw - 0.18) / (0.62 - 0.18)));
+        paint();
+      }
+
+      let tick = 0;
+      const requestMeasure = () => { tick ||= requestAnimationFrame(() => { tick = 0; measure(); }); };
+      window.addEventListener("scroll", requestMeasure, { passive: true });
+      window.addEventListener("resize", () => { layout(); requestMeasure(); });
+      if (typeof ResizeObserver !== "undefined") new ResizeObserver(() => layout()).observe(track);
+
+      // Head reveal (matches .lf-rv): visible immediately if in view / reduced motion.
+      if (head) {
+        if (reduceMotion || head.getBoundingClientRect().top < (window.innerHeight || 900) * 0.92) {
+          head.setAttribute("data-seen", "true");
+        } else if (typeof IntersectionObserver !== "undefined") {
+          const io = new IntersectionObserver(
+            (es) => { es.some((e) => e.isIntersecting) && (head.setAttribute("data-seen", "true"), io.disconnect()); },
+            { rootMargin: "0px 0px -12% 0px" }
+          );
+          io.observe(head);
+          setTimeout(() => head.setAttribute("data-seen", "true"), 9000);
+        } else {
+          head.setAttribute("data-seen", "true");
+        }
+      }
+
+      layout();
+      measure();
+    });
+  }
+
+  // `astro:page-load` fires on the initial load and on every client-side
+  // transition navigation — this section isn't `transition:persist`-ed, so
+  // its DOM is fresh each time, but a plain IIFE only ran once (Astro skips
+  // re-running an inline script whose content already executed this
+  // session), leaving the section inert/empty after navigating back to it.
+  document.addEventListener("astro:page-load", initServices);
+</script>

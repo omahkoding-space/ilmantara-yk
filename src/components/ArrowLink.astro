@@ -1,0 +1,26 @@
+---
+import ArrowMark from "./ArrowMark.astro";
+
+// Link teks + panah dengan hover terpadu: teks jadi accent, panah geser.
+// tone "ink": teks gelap → accent saat hover. tone "accent": sebaliknya.
+const {
+  href,
+  label,
+  tone = "ink",
+  external = false,
+  size = "text-[15px]",
+  class: cls = "",
+} = Astro.props;
+
+const tones = {
+  ink: "text-ink hover:text-accent",
+  accent: "text-accent hover:text-ink",
+};
+---
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  title={label}
+  class={`group font-medium underline underline-offset-4 transition-colors duration-200 ${tones[tone]} ${size} ${cls}`}
+>{label}{" "}<ArrowMark /></a>

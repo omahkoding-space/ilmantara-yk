@@ -1,0 +1,38 @@
+---
+// Responsive content image.
+//
+// Wraps <img> and emits a `srcset` built from the pre-generated WebP variants
+// recorded in src/data/image-variants.json (see scripts/optimize-images.mjs).
+// Pass `src` as the public path (e.g. "/images/work/project-wellness.webp") and
+// a `sizes` string describing the layout; when no variants exist for the path
+// it degrades to a plain <img>.
+import variants from "../data/image-variants.json";
+
+interface Props {
+  src: string;
+  alt?: string;
+  sizes?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { src, alt = "", sizes = "100vw", class: className, ...rest } = Astro.props;
+
+const widths = (variants as Record<string, number[]>)[src] ?? [];
+const dot = src.lastIndexOf(".");
+const base = dot >= 0 ? src.slice(0, dot) : src;
+const ext = dot >= 0 ? src.slice(dot) : "";
+const srcset = widths.length
+  ? widths.map((w) => `${base}-w${w}${ext} ${w}w`).join(", ")
+  : undefined;
+const defaultSrc = widths.length ? `${base}-w${widths[widths.length - 1]}${ext}` : src;
+---
+
+<img
+  src={defaultSrc}
+  srcset={srcset}
+  sizes={srcset ? sizes : undefined}
+  alt={alt}
+  class={className}
+  {...rest}
+/>

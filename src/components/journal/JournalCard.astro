@@ -1,0 +1,84 @@
+---
+import GlyphIcon from "../GlyphIcon.astro";
+import type { JournalPost } from "../../data/journal";
+import Img from "../Img.astro";
+import { LINK_UNDERLINE } from "../../lib/styles";
+
+const {
+  post,
+  titleClass = "text-[28px]",
+  selected = false,
+  sizes = "(min-width: 1280px) 31vw, (min-width: 768px) 46vw, 100vw",
+  titleTag: TitleTag = "h3",
+  priority = false,
+} = Astro.props as {
+  post: JournalPost;
+  titleClass?: string;
+  /** Show the Figma selection frame permanently (used for the featured post). */
+  selected?: boolean;
+  /** Responsive `sizes` hint for the cover image. */
+  sizes?: string;
+  /** Heading level for the title, so callers can keep the page's heading order sequential. */
+  titleTag?: "h2" | "h3";
+  /** Above-the-fold hero card: load its cover eagerly and at high priority. */
+  priority?: boolean;
+};
+
+const HANDLES = [
+  "left-0 top-0",
+  "left-1/2 top-0",
+  "left-full top-0",
+  "left-full top-1/2",
+  "left-full top-full",
+  "left-1/2 top-full",
+  "left-0 top-full",
+  "left-0 top-1/2",
+];
+---
+
+<a href={`/journal/${post.slug}/`} class="group block text-ink">
+  <!-- frame label -->
+  <div class="mb-2.5 flex items-center justify-between gap-3 font-mono text-[11px] font-medium uppercase leading-none tracking-[0.04em]">
+    <span class="flex items-center gap-1.5 text-accent">
+      <GlyphIcon name="diamond" />
+      <span>{post.tag}</span>
+    </span>
+    <span class="truncate text-ink/65">{post.date} · {post.readTime}</span>
+  </div>
+
+  <!-- image frame + selection (always on for the featured post, on hover otherwise) -->
+  <div class="relative">
+    <div class="overflow-hidden rounded-md border border-ink/10">
+      <Img
+        src={post.cover}
+        alt={post.coverAlt}
+        sizes={sizes}
+        loading={priority ? "eager" : "lazy"}
+        fetchpriority={priority ? "high" : undefined}
+        class="aspect-[16/10] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+      />
+    </div>
+    <div
+      aria-hidden="true"
+      class:list={[
+        "pointer-events-none absolute inset-0 transition-opacity duration-200",
+        selected ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+      ]}
+    >
+      <span class="absolute inset-0 border-[1.5px] border-accent"></span>
+      {
+        HANDLES.map((pos) => (
+          <span class:list={[pos, "absolute h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"]} />
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- meta -->
+  <div class="mt-4">
+    <TitleTag class={`${LINK_UNDERLINE} font-semibold leading-[1.08] tracking-[-0.025em] text-ink transition-colors duration-300 group-hover:text-accent ${titleClass}`}>
+      {post.title}
+    </TitleTag>
+    <p class="mt-2.5 text-[15px] leading-[1.55] text-ink/60">{post.excerpt}</p>
+  </div>
+</a>

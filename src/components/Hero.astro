@@ -1,0 +1,1268 @@
+---
+import GlyphIcon from "./GlyphIcon.astro";
+// Shared custom hero for the homepage.
+// Specification: research/hero-reference-20261012T095713Z/README.md.
+import { WHATSAPP_LINK } from "../lib/site";
+// Shared constants live in a module so the client script below is bundled and
+// minified by Vite rather than emitted as unminified inline JS.
+import { TEAM, ACCENT } from "../lib/hero-config";
+
+const INK = "#0C0C0E";
+const MARA_COLOR = "#FF5B24";
+
+const HEADLINE = "Software House Jogja untuk Website, Toko Online Shopify & Aplikasi Web";
+const DESCRIPTION = "Kami membantu UMKM dan brand membuat website, landing page, dan toko online Shopify yang cepat, mudah dikelola, dan siap mendatangkan pelanggan. Berbasis di Yogyakarta, melayani klien di seluruh Indonesia dan luar negeri.";
+const TRUST_LINE = "Dipercaya pemilik brand, ilustrator, dan startup dari Jogja hingga Berlin · Shopify · Laravel · React";
+const CURRENT_ROLE = "Software House Jogja";
+const AVAILABILITY = "Menerima proyek baru";
+const PRIMARY_LABEL = "Konsultasi Gratis via WhatsApp";
+const PRIMARY_LINK = WHATSAPP_LINK;
+const SECONDARY_LABEL = "Lihat Portofolio";
+const SECONDARY_LINK = "/#selected-work";
+const COMMENT_AUTHOR = "Dimas";
+const COMMENT_TEXT = "Tulisannya bisa lebih besar? Ini yang pertama dibaca klien.";
+const REPLY_AUTHOR = "Dana";
+const REPLY_TEXT = "Sudah 208. Minta Tolong Di cek.";
+const CHROME = "absolute rounded-xl border border-ink/10 bg-white/[.82] backdrop-blur-[14px] backdrop-saturate-[1.4] shadow-[inset_0_1px_0_rgba(255,255,255,.8),0_18px_40px_-18px_rgba(12,12,14,.28),0_2px_6px_rgba(12,12,14,.05)]";
+const FIELD = "flex h-7 items-center gap-2 rounded-md bg-ink/[.045] px-2 font-mono text-[12px] font-medium leading-none transition-[background,color] duration-200";
+---
+
+<section data-hero-anim data-framer-name="01 Hero" class="relative">
+  <div id="ha-container" class="relative -mt-14 h-screen min-h-[760px] min-[900px]:min-h-[560px] cursor-none overflow-hidden bg-paper font-sans text-[12px] text-ink select-none">
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 opacity-90"
+      style="background-image: radial-gradient(circle at 1px 1px, rgba(12,12,14,0.16) 1px, transparent 1.2px); background-size: 24px 24px;"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      class="absolute inset-0"
+      style="background: radial-gradient(1200px 520px at 50% 34%, rgba(255,255,255,0.75), transparent 70%);"
+    >
+    </div>
+
+    <div id="ha-canvas" class="absolute left-0 top-0 origin-top-left">
+      <div id="ha-artboard" class="absolute inset-0 origin-[50%_40%]">
+      <div id="ha-statement" class="absolute text-center" style="opacity:0">
+        <h1 id="ha-headline" class="m-0 mt-3 text-[26px] font-semibold leading-[1.16] tracking-[-0.032em] text-balance min-[900px]:text-[36px]">{HEADLINE}</h1>
+        <p id="ha-description" class="mx-auto mb-0 mt-3 max-w-3xl text-[18px] font-normal leading-[1.45] tracking-[-0.015em] text-balance text-ink/60 min-[900px]:text-[20px]">{DESCRIPTION}</p>
+        <p class="mx-auto mb-0 mt-3 max-w-3xl font-mono text-[11px] font-medium leading-[1.5] tracking-[0.02em] text-ink/65">{TRUST_LINE}</p>
+      </div>
+      <div
+        id="ha-breadcrumb"
+        class="absolute flex items-center gap-2.5 font-mono text-[11px] font-medium leading-none tracking-[0.02em]"
+        style={`color: rgba(12,12,14,.5); opacity:0;`}
+      >
+        <span style={`color:${ACCENT}`}>#</span>
+        <span>Home — <span id="ha-mode-label">Desktop</span></span>
+        <span class="opacity-60" id="ha-dims-label">1440 × 900</span>
+      </div>
+
+      <div id="ha-role" data-floating-component="role" class="absolute w-[172px] will-change-transform transition-shadow duration-200 [@media(hover:hover)]:hover:shadow-[0_0_0_2px_#4B3BFF40] motion-reduce:transition-none min-[900px]:w-[208px]" style="opacity:0">
+        <div class="absolute left-0 -top-[18px] flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none whitespace-nowrap text-accent">
+          <GlyphIcon name="diamond" /><span>Role</span>
+        </div>
+        <div class="rounded-[14px] border border-ink/10 bg-white p-[14px] shadow-[0_24px_44px_-22px_rgba(12,12,14,.42)]">
+          <div class="flex items-center gap-[7px] font-mono text-[11px] font-medium uppercase tracking-[0.04em] whitespace-nowrap" style={`color:${ACCENT}`}>
+            <GlyphIcon name="diamond" class="text-[10px] leading-none" />
+            <span>{CURRENT_ROLE}</span>
+          </div>
+        </div>
+      </div>
+      <div id="ha-avail" data-floating-component="avail" class="absolute w-[206px] will-change-transform transition-shadow duration-200 [@media(hover:hover)]:hover:shadow-[0_0_0_2px_#4B3BFF40] motion-reduce:transition-none" style="opacity:0">
+        <div class="absolute left-0 -top-[18px] flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none whitespace-nowrap text-accent">
+          <GlyphIcon name="diamond" /><span>Availability</span>
+        </div>
+        <div class="rounded-[14px] border border-ink/10 bg-white p-[14px] shadow-[0_24px_44px_-22px_rgba(12,12,14,.42)]">
+          <div class="flex items-center gap-[7px] font-mono text-[11px] font-medium uppercase tracking-[0.04em] whitespace-nowrap" style="color: rgba(12,12,14,.62);">
+            <span style="width:7px;height:7px;border-radius:9px;background:#19C37D;box-shadow:0 0 0 3px rgba(25,195,125,.18);"></span>
+            <span>{AVAILABILITY}</span>
+          </div>
+        </div>
+      </div>
+
+      <svg id="ha-name-svg" class="pointer-events-none absolute left-0 top-0 overflow-visible" role="group" aria-label="Ilmantara move and resize controls">
+        <g id="ha-glyph-scale" aria-hidden="true">
+          <g id="ha-glyph-fill"></g>
+          <g id="ha-glyph-outline"></g>
+          <g id="ha-anchors"></g>
+        </g>
+        <g id="ha-selbox" aria-hidden="true">
+          <rect id="ha-selrect" fill="none" stroke={ACCENT} stroke-width="1.5"></rect>
+          <g id="ha-handles"></g>
+        </g>
+        <rect id="ha-move-surface" fill="transparent" class="pointer-events-none focus-visible:stroke-accent focus-visible:stroke-[2px]"></rect>
+        <g id="ha-editor-hitareas"></g>
+      </svg>
+      <svg id="ha-hover-svg" class="pointer-events-none absolute left-0 top-0 z-[25] overflow-visible" aria-hidden="true">
+        <g id="ha-hover-box" style="opacity:0"><rect fill="none" stroke={ACCENT} stroke-width="1.5"></rect></g>
+        <g id="ha-guides"></g>
+        <text id="ha-hover-label" class="font-mono text-[10px] font-medium" fill={ACCENT}></text>
+      </svg>
+      <div id="ha-dimlabel" class="pointer-events-none absolute origin-center rounded-[4px] bg-accent px-[7px] py-[5px] font-mono text-[11px] font-medium leading-none whitespace-nowrap text-white transition-[background] duration-200" style="opacity:0"></div>
+
+      <div id="ha-cta" class="absolute left-0 flex flex-wrap justify-center gap-[10px]" style="opacity:0">
+        <a href={PRIMARY_LINK} id="ha-cta-primary" title={PRIMARY_LABEL} target="_blank" rel="noopener" class="group box-border inline-flex h-12 cursor-none items-center gap-[10px] rounded-[10px] px-5 text-[15px] font-medium transition-[transform,box-shadow,background] duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] motion-safe:[@media(hover:hover)]:hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,.55)] active:translate-y-0 motion-safe:active:scale-[.98] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-accent" style={`background:${INK}; color:#fff; line-height:15px; letter-spacing:-0.015em;`}>
+          {PRIMARY_LABEL}
+          <svg class="transition-transform duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:translate-y-0.5 motion-reduce:transition-none" width="14" height="14" viewBox="0 0 14 14"><path d="M3 3 L11 11 M11 4.5 L11 11 L4.5 11" stroke="currentColor" stroke-width="1.6" fill="none"></path></svg>
+        </a>
+        <a href={SECONDARY_LINK} id="ha-cta-secondary" title={SECONDARY_LABEL} class="group box-border inline-flex h-12 cursor-none items-center gap-[10px] rounded-[10px] border border-ink/15 bg-white/[.7] px-5 text-[15px] font-medium text-ink backdrop-blur-[8px] transition-[transform,box-shadow,background] duration-[350ms] ease-[cubic-bezier(.22,1,.36,1)] motion-safe:[@media(hover:hover)]:hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,.35)] active:translate-y-0 motion-safe:active:scale-[.98] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-accent" style="line-height:15px; letter-spacing:-0.015em;">
+          {SECONDARY_LABEL}
+        </a>
+      </div>
+
+      </div>
+      <div id="ha-mara-cursor" class="pointer-events-none absolute z-30" style="opacity:0; will-change: transform;">
+        <svg width="20" height="22" viewBox="0 0 20 22" class="absolute -left-0.5 -top-0.5 drop-shadow-[0_2px_3px_rgba(0,0,0,.2)]">
+          <path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill={MARA_COLOR} stroke="#fff" stroke-width="1.4" stroke-linejoin="round"></path>
+        </svg>
+        <div class="absolute whitespace-nowrap text-[11px] font-medium leading-none tracking-[-0.01em] text-ink shadow-[0_4px_10px_rgba(0,0,0,.12)]" style={`left:14px; top:17px; background:${MARA_COLOR}; padding:5px 7px; border-radius:3px 8px 8px 8px;`}>{COMMENT_AUTHOR}</div>
+      </div>
+
+      <!-- Avatar + collapsed-thread badge: the comment/reply card scales/fades
+           out of this same anchor point as it collapses (K window). -->
+      <div id="ha-comment-pulse" class="absolute size-8 rounded-full border-2 border-[#FF5B24] opacity-0" aria-hidden="true"></div>
+      <div id="ha-thread-anchor" class="pointer-events-none absolute z-20" style="opacity:0;">
+        <button type="button" id="ha-avatar" data-comment-toggle="mara" aria-label="Toggle Dimas comment" aria-controls="ha-comment" aria-expanded="false" disabled tabindex="-1" class="pointer-events-none cursor-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent absolute -left-[14px] -top-[30px] flex size-7 items-center justify-center rounded-[50%_50%_50%_4px] border-2 border-white bg-[#FF5B24] text-[12px] font-semibold leading-none text-ink shadow-[0_6px_14px_rgba(255,91,36,.35)]">
+          {COMMENT_AUTHOR[0]}
+          <span id="ha-thread-badge" class="absolute -right-[9px] -top-[7px] h-4 min-w-[16px] rounded-[9px] text-center text-[9px] font-semibold leading-4 text-white" style={`background:${INK};`}>2</span>
+        </button>
+        <div data-comment-popup id="ha-comment" class="absolute -left-[290px] -top-[6px] w-[262px] rounded-xl border border-ink/10 bg-white px-3 py-[11px] shadow-[0_22px_44px_-20px_rgba(12,12,14,.35)]">
+          <div class="flex items-center gap-1.5 text-[12px] font-semibold leading-none">{COMMENT_AUTHOR}<span class="text-[11px] font-normal leading-none text-ink/65">just now</span></div>
+          <div class="mt-1.5 min-h-[35px] text-[13px] font-normal leading-[1.35] tracking-[-0.01em]"><span id="ha-comment-text"></span><span id="ha-comment-caret" class="ml-px inline-block h-[14px] w-[1.5px] align-[-2px] bg-[#FF5B24]"></span></div>
+          <div id="ha-reply-block" class="mt-[9px] border-t pt-[9px]" style="border-color: rgba(12,12,14,.1); opacity:0;">
+            <div class="text-[12px] font-semibold leading-none text-[#10B37A]">{REPLY_AUTHOR}</div>
+            <div class="mt-[5px] text-[13px]" style="line-height:1.35;">{REPLY_TEXT}</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ha-theo-cursor" class="pointer-events-none absolute z-30" style="opacity:0; will-change: transform;">
+        <svg width="20" height="22" viewBox="0 0 20 22" class="absolute -left-0.5 -top-0.5 drop-shadow-[0_2px_3px_rgba(0,0,0,.2)]">
+          <path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill="#10B37A" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"></path>
+        </svg>
+        <div class="absolute whitespace-nowrap text-[11px] font-medium leading-none tracking-[-0.01em] text-ink shadow-[0_4px_10px_rgba(0,0,0,.12)]" style="left:14px; top:17px; background:#10B37A; padding:5px 7px; border-radius:3px 8px 8px 8px;">{REPLY_AUTHOR}</div>
+      </div>
+
+      {TEAM.map((member) => (
+        <>
+          <div id={`ha-${member.id}-cursor`} aria-hidden="true" class="pointer-events-none absolute z-30 opacity-0 will-change-transform">
+            <svg width="20" height="22" viewBox="0 0 20 22" class="absolute -left-0.5 -top-0.5 drop-shadow-[0_2px_3px_rgba(0,0,0,.2)]">
+              <path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill={member.color} stroke="#fff" stroke-width="1.4" stroke-linejoin="round"></path>
+            </svg>
+            <div data-team-label class="absolute left-[14px] top-[17px] rounded-[3px_8px_8px_8px] px-[7px] py-[5px] text-[11px] font-medium leading-none tracking-[-0.01em] whitespace-nowrap shadow-[0_4px_10px_rgba(0,0,0,.12)]" style={{ backgroundColor: member.color, color: member.labelColor }}>{member.name}</div>
+          </div>
+          {member.message && (
+            <div id={`ha-${member.id}-thread`} aria-hidden="true" class="pointer-events-none absolute z-[28] opacity-0">
+              <button type="button" data-team-avatar data-comment-toggle={member.id} aria-label={`Toggle ${member.name} comment`} aria-controls={`ha-${member.id}-bubble`} aria-expanded="false" disabled tabindex="-1" class="pointer-events-none cursor-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent absolute -right-[12px] -top-7 flex size-7 items-center justify-center rounded-[50%_50%_50%_4px] border-2 border-white text-[12px] font-semibold leading-none shadow-md" style={{ backgroundColor: member.color, color: member.labelColor }}>{member.name[0]}</button>
+              <div id={`ha-${member.id}-bubble`} data-comment-popup data-team-bubble class="relative w-[260px] origin-top-right rounded-xl border border-ink/10 bg-white px-3 py-[11px] shadow-[0_22px_44px_-20px_rgba(12,12,14,.35)]">
+                <div class="text-[12px] font-semibold leading-none" style={{ color: member.color }}>{member.name}</div>
+                <div class="mt-1.5 text-[13px] leading-[1.35] tracking-[-0.01em]">{member.message}</div>
+              </div>
+            </div>
+          )}
+        </>
+      ))}
+
+      <div id="ha-pen-cursor" class="absolute pointer-events-none" style="opacity:0; z-index:30; will-change: transform;">
+        <svg width="22" height="22" viewBox="0 0 22 22" style="position:absolute; left:-3px; top:-3px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.18));">
+          <path d="M3 3 L9 17 L11.5 11.5 L17 9 Z" fill="#fff" stroke={ACCENT} stroke-width="1.6" stroke-linejoin="round"></path>
+          <circle cx="10" cy="10" r="1.6" fill={ACCENT}></circle>
+        </svg>
+        <div id="ha-pen-cursor-label" class="absolute whitespace-nowrap text-[11px] font-medium leading-none tracking-[-0.01em] text-white shadow-[0_4px_10px_rgba(0,0,0,.12)]" style={`left:14px; top:17px; background:${ACCENT}; padding:5px 7px; border-radius:3px 8px 8px 8px;`}></div>
+      </div>
+
+      <div id="ha-you-cursor" class="pointer-events-none absolute z-30 hidden origin-top-left" style="will-change: transform;">
+        <svg width="20" height="22" viewBox="0 0 20 22" style="position: absolute; left: -2px; top: -2px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.2));">
+          <path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill={ACCENT} stroke="#fff" stroke-width="1.4" stroke-linejoin="round"></path>
+        </svg>
+        <div class="absolute whitespace-nowrap text-[11px] font-medium leading-none tracking-[-0.01em] text-white shadow-[0_4px_10px_rgba(0,0,0,.12)]" style={`left:14px; top:17px; background:${ACCENT}; padding:5px 7px; border-radius:3px 8px 8px 8px;`}>You</div>
+      </div>
+
+      <!-- These chrome panels use fixed CANVAS-space coordinates straight from
+           the reference (left:36/top:590 and left:1168/top:548, desktop-only),
+           not CSS bottom/right screen anchoring — so they pan/scale with the
+           rest of the canvas instead of sticking to the viewport edge. -->
+      <div id="ha-layers" data-floating-component="layers" style="opacity:0" class:list={[CHROME, "left-[36px] top-[590px] h-[262px] w-[236px] overflow-hidden text-[12px] leading-none will-change-transform transition-[border-color] duration-200 [@media(hover:hover)]:hover:border-accent/40 motion-reduce:transition-none"]}>
+        <div class="flex gap-3.5 border-b border-ink/10 px-3.5 pt-3 pb-2.5 font-semibold">
+          <span>Layers</span><span class="font-medium text-ink/65">Assets</span>
+          <span class="ml-auto font-mono text-[10px] font-medium text-ink/65">Home</span>
+        </div>
+        <div id="ha-layers-list" class="p-1.5"></div>
+      </div>
+
+      <div id="ha-inspect" data-floating-component="inspect" style="opacity:0" class:list={[CHROME, "left-[1168px] top-[548px] h-[304px] w-[236px] overflow-hidden will-change-transform transition-[border-color] duration-200 [@media(hover:hover)]:hover:border-accent/40 motion-reduce:transition-none"]}>
+        <div class="flex gap-3.5 border-b border-ink/10 px-3.5 pt-3 pb-2.5 text-[12px] font-semibold leading-none"><span>Design</span><span class="font-medium text-ink/65">Prototype</span><span class="font-medium text-ink/65">Inspect</span></div>
+        <div class="grid gap-3.5 px-3.5 py-3">
+          <div>
+            <div id="ha-inspect-name" class="mb-[9px] overflow-hidden text-[11px] font-semibold leading-none text-ink/80 text-ellipsis whitespace-nowrap">Nothing selected</div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <div class={FIELD}><span class="text-[10px] text-ink/65">X</span><span id="ha-inspect-x">–</span></div>
+              <div class={FIELD}><span class="text-[10px] text-ink/65">Y</span><span id="ha-inspect-y">–</span></div>
+              <div id="ha-field-w" class={FIELD}><span class="text-[10px] text-ink/65">W</span><span id="ha-inspect-w">–</span></div>
+              <div id="ha-field-h" class={FIELD}><span class="text-[10px] text-ink/65">H</span><span id="ha-inspect-h">–</span></div>
+            </div>
+          </div>
+          <div id="ha-inspect-text-block">
+            <div class="mb-[9px] text-[11px] font-semibold leading-none text-ink/80">Text</div>
+            <div class="flex justify-between text-[12px] font-medium leading-none"><span>Geist</span><span class="text-ink/65">Semibold</span></div>
+            <div class="mt-2 grid grid-cols-2 gap-1.5">
+              <div id="ha-field-font" class={FIELD}><span class="text-[10px] text-ink/65">Aa</span><span id="ha-inspect-fontsize">200</span></div>
+              <div class={FIELD}><span class="text-[10px] text-ink/65">|A|</span>-5%</div>
+            </div>
+          </div>
+          <div>
+            <div class="mb-[9px] text-[11px] font-semibold leading-none text-ink/80">Fill</div>
+            <div class="flex items-center gap-2 font-mono text-[12px] font-medium leading-none">
+              <span id="ha-inspect-swatch" class="size-4 shrink-0 rounded-[4px] border border-ink/10 bg-ink bg-cover"></span>
+              <span id="ha-inspect-fill">RGB(12, 12, 14)</span>
+              <span id="ha-inspect-fill-detail" class="ml-auto text-ink/65">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ha-toolbar" style="opacity:0" class:list={[CHROME, "left-[570px] top-[842px] flex h-11 w-[300px] items-center justify-center gap-1 overflow-visible"]}>
+        <button id="ha-tool-move" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Move">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M3 2 L3 13 L6.2 10 L8.5 14.5 L10.4 13.6 L8.2 9.2 L12.5 9 Z"></path></svg>
+        </button>
+        <button id="ha-tool-frame" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Frame">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M5 1.5v13M11 1.5v13M1.5 5h13M1.5 11h13"></path></svg>
+        </button>
+        <button id="ha-tool-pen" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Pen">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M3 13 L5 7 L9.5 2.5 L13.5 6.5 L9 11 Z M3 13 L7 9"></path><circle cx="7.4" cy="8.6" r="1"></circle></svg>
+        </button>
+        <button id="ha-tool-text" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Text">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M3 3.5h10M8 3.5v10M6 13.5h4"></path></svg>
+        </button>
+        <button id="ha-tool-comment" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Comment">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M8 2.5a5.5 5.5 0 1 1-4.3 8.9L2.5 13.5l.6-3A5.5 5.5 0 0 1 8 2.5z"></path></svg>
+        </button>
+        <button id="ha-tool-scale" class="flex h-8 w-9 items-center justify-center rounded-lg" aria-label="Scale">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0C0C0E" stroke-width="1.4" stroke-linejoin="round"><path d="M2.5 13.5h4M2.5 13.5v-4M13.5 2.5h-4M13.5 2.5v4M3 13l10-10"></path></svg>
+        </button>
+        <span class="mx-1.5 h-5 w-px" style="background: rgba(12,12,14,.1);"></span>
+        <span class="font-mono text-[11px] font-medium leading-none text-ink/65">100%</span>
+      </div>
+    </div>
+
+    <div id="ha-ruler" class="pointer-events-none absolute inset-0" style="opacity:0;">
+      <svg id="ha-ruler-h" style="position:absolute; left:0; top:0; background: rgba(248,248,246,.92); border-bottom:1px solid rgba(12,12,14,.1);"></svg>
+      <svg id="ha-ruler-v" style="position:absolute; left:0; top:20px; background: rgba(248,248,246,.92); border-right:1px solid rgba(12,12,14,.1);"></svg>
+      <div id="ha-ruler-corner" style="position:absolute; left:0; top:0; width:20px; height:20px; background:rgb(248,248,246); border-right:1px solid rgba(12,12,14,.1); border-bottom:1px solid rgba(12,12,14,.1);"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import glyphData from "../data/hero-glyphs.json";
+  import { createWordmarkEditor, paintActionCursor } from "../lib/hero-wordmark-editor.js";
+  import { CANVAS_W, CANVAS_H, MOBILE_CANVAS_W, MOBILE_CANVAS_H, ORIGINAL_DURATION, TOTAL_DURATION, TEAM, ACCENT, GUIDE_COLOR, COMMENT_TEXT } from "../lib/hero-config";
+
+  const EASE = {
+    out: (e) => 1 - (1 - e) ** 4,
+    expo: (e) => (e >= 1 ? 1 : 1 - 2 ** (-10 * e)),
+    inOut: (e) => (e < 0.5 ? 8 * e * e * e * e : 1 - (-2 * e + 2) ** 4 / 2),
+    back: (e) => 1 + 2.56 * (e - 1) ** 3 + 1.56 * (e - 1) ** 2,
+  };
+  const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+  const norm = (v, a, b) => clamp((v - a) / (b - a));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const round = (n) => Math.round(n);
+  const NS = "http://www.w3.org/2000/svg";
+  function setText(node, value) {
+    const text = String(value);
+    if (node.textContent !== text) node.textContent = text;
+  }
+
+  // Secondary-story beats are hardcoded absolute seconds in the reference,
+  // calibrated for "Ilmantara" (9 glyphs, L_ref=3.15s). Expressed here as
+  // offsets from L_ref so the rhythm scales with however many glyphs our text has.
+  const L_REF = 3.15;
+  const off = (abs) => abs - L_REF;
+  const BEATS = {
+    commentPulseStart: off(4.95), commentPulseEnd: off(5.25),
+    commentScaleStart: off(5.05), commentScaleEnd: off(5.45),
+    typeStart: off(5.3), typeEnd: off(6.4),
+    toolCommentStart: off(4.7), toolCommentEnd: off(5.4),
+    toolScaleStart: off(7.3), toolScaleEnd: off(8.6),
+    maraArriveStart: off(3.9), maraArriveEnd: off(5.0),
+    maraDepartStart: off(6.4), maraDepartEnd: off(7.4),
+    wobbleBase: off(6.4),
+    secondApproachStart: off(6.3), secondApproachEnd: off(7.35),
+    scaleBumpStart: off(7.5), scaleBumpEnd: off(8.5),
+    replyBackStart: off(8.7), replyBackEnd: off(9.1),
+    secondToFtStart: off(8.8), secondToFtEnd: off(9.7),
+    secondArcStart: off(9.7), secondArcEnd: off(11.5),
+    secondFinalStart: off(11.5), secondFinalEnd: off(12.4),
+    collapseStart: off(10.4), collapseEnd: off(10.9),
+  };
+
+  async function init() {
+    const container = document.getElementById("ha-container");
+    const canvas = document.getElementById("ha-canvas");
+    if (!container || !canvas || container.dataset.haInitialized) return;
+    container.dataset.haInitialized = "true";
+    const artboard = document.getElementById("ha-artboard");
+    const abort = new AbortController();
+
+    const svg = document.getElementById("ha-name-svg");
+    const hoverSvg = document.getElementById("ha-hover-svg");
+    const glyphScaleG = document.getElementById("ha-glyph-scale");
+    const glyphFillG = document.getElementById("ha-glyph-fill");
+    const glyphOutlineG = document.getElementById("ha-glyph-outline");
+    const anchorsG = document.getElementById("ha-anchors");
+    const selRect = document.getElementById("ha-selrect");
+    const selBoxG = document.getElementById("ha-selbox");
+    const handlesG = document.getElementById("ha-handles");
+    const hoverBoxG = document.getElementById("ha-hover-box");
+    const hoverRect = hoverBoxG.querySelector("rect");
+    const guidesG = document.getElementById("ha-guides");
+    const dimLabel = document.getElementById("ha-dimlabel");
+    const hoverLabel = document.getElementById("ha-hover-label");
+    const breadcrumb = document.getElementById("ha-breadcrumb");
+    const modeLabel = document.getElementById("ha-mode-label");
+    const dimsLabel = document.getElementById("ha-dims-label");
+    const roleEl = document.getElementById("ha-role");
+    const availEl = document.getElementById("ha-avail");
+    const statement = document.getElementById("ha-statement");
+    const contentLayout = { key: null, height: 0, ctaHeight: 48, ctaWidth: 194, roleHeight: 0, availHeight: 0 };
+    const cta = document.getElementById("ha-cta");
+    const ctaPrimary = document.getElementById("ha-cta-primary");
+    const maraCursor = document.getElementById("ha-mara-cursor");
+    const commentCaret = document.getElementById("ha-comment-caret");
+    const commentPulse = document.getElementById("ha-comment-pulse");
+    const threadAnchor = document.getElementById("ha-thread-anchor");
+    artboard.append(threadAnchor, commentPulse);
+    const avatar = document.getElementById("ha-avatar");
+    const threadBadge = document.getElementById("ha-thread-badge");
+    const comment = document.getElementById("ha-comment");
+    const commentText = document.getElementById("ha-comment-text");
+    const replyBlock = document.getElementById("ha-reply-block");
+    const theoCursor = document.getElementById("ha-theo-cursor");
+    const penCursor = document.getElementById("ha-pen-cursor");
+    document.getElementById("ha-pen-cursor-label").textContent = `${glyphData.text.split(" ")[0]} · Pen`;
+    const youCursor = document.getElementById("ha-you-cursor");
+    const hRulerSvg = document.getElementById("ha-ruler-h");
+    const vRulerSvg = document.getElementById("ha-ruler-v");
+    const rulerCorner = document.getElementById("ha-ruler-corner");
+    const RULER_TICK = "rgba(12,12,14,.28)";
+    const RULER_LABEL = "rgba(12,12,14,.45)";
+    function svgEl(tag, attrs) {
+      const node = document.createElementNS(NS, tag);
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+      return node;
+    }
+    // Canvas-anchored ruler (ported from the reference's own `ht()`): ticks
+    // are drawn in CANVAS space and panned/scaled by originX/originY/s, same
+    // as the name/selection box — not static screen pixels.
+    let hSelection, vSelection;
+    function drawRuler(w, h, originX, originY, s) {
+      hRulerSvg.setAttribute("width", String(w));
+      hRulerSvg.setAttribute("height", "20");
+      hRulerSvg.style.top = "56px";
+      vRulerSvg.setAttribute("width", "20");
+      vRulerSvg.setAttribute("height", String(Math.max(0, h - 56 - 20)));
+      vRulerSvg.style.top = "76px";
+      rulerCorner.style.top = "56px";
+      hRulerSvg.replaceChildren();
+      vRulerSvg.replaceChildren();
+      hSelection = svgEl("rect", { y: 0, height: 20, fill: ACCENT, opacity: .14 });
+      vSelection = svgEl("rect", { x: 0, width: 20, fill: ACCENT, opacity: .14 });
+      hRulerSvg.appendChild(hSelection);
+      vRulerSvg.appendChild(vSelection);
+
+      const hStart = Math.floor((20 - originX) / s / 10) * 10;
+      const hEnd = (w - originX) / s;
+      for (let cx = hStart; cx <= hEnd; cx += 10) {
+        const sx = originX + cx * s;
+        if (sx < 20) continue;
+        const major = cx % 100 === 0;
+        hRulerSvg.appendChild(svgEl("line", { x1: sx, x2: sx, y1: major ? 6 : cx % 50 === 0 ? 12 : 15, y2: 20, stroke: RULER_TICK, "stroke-width": 1 }));
+        if (major) {
+          const t = svgEl("text", { x: sx + 3, y: 10, fill: RULER_LABEL, "font-family": "'Geist Mono', monospace", "font-size": 8.5 });
+          t.textContent = String(cx);
+          hRulerSvg.appendChild(t);
+        }
+      }
+
+      const vStart = Math.floor((76 - originY) / s / 10) * 10;
+      const vEnd = (h - originY) / s;
+      for (let cy = vStart; cy <= vEnd; cy += 10) {
+        const sy = originY + cy * s - 56 - 20;
+        if (sy < 0) continue;
+        const major = cy % 100 === 0;
+        vRulerSvg.appendChild(svgEl("line", { y1: sy, y2: sy, x1: major ? 6 : cy % 50 === 0 ? 12 : 15, x2: 20, stroke: RULER_TICK, "stroke-width": 1 }));
+        if (major) {
+          const t = svgEl("text", {
+            x: 10, y: sy + 3, fill: RULER_LABEL, "font-family": "'Geist Mono', monospace", "font-size": 8.5,
+            transform: `rotate(-90 10 ${sy + 3})`,
+          });
+          t.textContent = String(cy);
+          vRulerSvg.appendChild(t);
+        }
+      }
+    }
+    let hCrosshair = null, vCrosshair = null;
+    let lastCrosshairKey = null;
+    let lastRulerKey = null; // only rebuild the ~140-node tick/label DOM when geometry actually changes, not every RAF frame
+    const parallax = { x: 0, y: 0 }; // panel parallax, independent of the wordmark editor
+    function updateRulerCrosshair(mouse) {
+      const key = mouse ? `${mouse.x}|${mouse.y}` : 'none';
+      if (key === lastCrosshairKey && (!mouse || hCrosshair?.isConnected)) return;
+      lastCrosshairKey = key;
+      if (!hCrosshair?.isConnected) {
+        hCrosshair = svgEl('line', { y1: 0, y2: 20, stroke: ACCENT, 'stroke-width': 1.5 });
+        vCrosshair = svgEl('line', { x1: 0, x2: 20, stroke: ACCENT, 'stroke-width': 1.5 });
+        hRulerSvg.append(hCrosshair); vRulerSvg.append(vCrosshair);
+      }
+      hCrosshair.style.display = vCrosshair.style.display = mouse ? '' : 'none';
+      if (!mouse) return;
+      hCrosshair.setAttribute('x1', mouse.x); hCrosshair.setAttribute('x2', mouse.x);
+      vCrosshair.setAttribute('y1', mouse.y - 76); vCrosshair.setAttribute('y2', mouse.y - 76);
+    }
+    const layersList = document.getElementById("ha-layers-list");
+    const layersPanel = document.getElementById("ha-layers");
+    const inspectPanel = document.getElementById("ha-inspect");
+    const inspectName = document.getElementById("ha-inspect-name");
+    const inspectX = document.getElementById("ha-inspect-x");
+    const inspectY = document.getElementById("ha-inspect-y");
+    const inspectW = document.getElementById("ha-inspect-w");
+    const inspectH = document.getElementById("ha-inspect-h");
+    const inspectTextBlock = document.getElementById("ha-inspect-text-block");
+    const inspectFontSize = document.getElementById("ha-inspect-fontsize");
+    const toolMove = document.getElementById("ha-tool-move");
+    const toolFrame = document.getElementById("ha-tool-frame");
+    const toolPen = document.getElementById("ha-tool-pen");
+    const toolText = document.getElementById("ha-tool-text");
+    const toolComment = document.getElementById("ha-tool-comment");
+    const toolScale = document.getElementById("ha-tool-scale");
+    const toolButtons = { move: toolMove, frame: toolFrame, pen: toolPen, text: toolText, comment: toolComment, scale: toolScale };
+    const toolbar = document.getElementById("ha-toolbar");
+    const floating = Object.fromEntries([["role", roleEl, 10], ["avail", availEl, 16], ["layers", layersPanel, 5], ["inspect", inspectPanel, 5]].map(([id, node, depth], index) => {
+      const state = { node, depth, index, hovered: false, lift: 0, x: 0, y: 0 };
+      node.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') state.hovered = true; }, { signal: abort.signal });
+      node.addEventListener('pointerleave', () => { state.hovered = false; }, { signal: abort.signal });
+      return [id, state];
+    }));
+    let lastMotionTick = performance.now();
+    let lastPanelState = null;
+    let lastTool = null;
+    const layerRowIcons = {};
+    const teamNodes = TEAM.map((member) => ({
+      ...member,
+      cursor: document.getElementById(`ha-${member.id}-cursor`),
+      thread: document.getElementById(`ha-${member.id}-thread`),
+    }));
+
+    // --- Build glyph DOM once (fill path + dashed outline path + anchor markers per glyph) ---
+    const glyphNodes = glyphData.glyphs.map((g) => {
+      const fillPath = document.createElementNS(NS, "path");
+      fillPath.setAttribute("d", g.d);
+      fillPath.setAttribute("fill", "#0C0C0E");
+      fillPath.setAttribute("stroke", "none");
+      glyphFillG.appendChild(fillPath);
+
+      const outlinePath = document.createElementNS(NS, "path");
+      outlinePath.setAttribute("d", g.d);
+      outlinePath.setAttribute("fill", "none");
+      outlinePath.setAttribute("stroke", ACCENT);
+      outlinePath.setAttribute("stroke-dasharray", "1 1");
+      outlinePath.setAttribute("pathLength", "1");
+      glyphOutlineG.appendChild(outlinePath);
+
+      const glyphAnchorG = svgEl("g", {});
+      anchorsG.appendChild(glyphAnchorG);
+      const onCurve = g.pts.filter((p) => p[2] === 0);
+      const anchorNodes = onCurve.map(() => {
+        const r = document.createElementNS(NS, "rect");
+        r.setAttribute("width", 5);
+        r.setAttribute("height", 5);
+        r.setAttribute("fill", "#fff");
+        r.setAttribute("stroke", ACCENT);
+        r.setAttribute("stroke-width", 1);
+        glyphAnchorG.appendChild(r);
+        return r;
+      });
+
+      const controls = g.pts.filter((p) => p[2] === 1).map((p) => {
+        const nodes = [svgEl("line", { stroke: ACCENT, "stroke-width": .8, opacity: .7 }), svgEl("line", { stroke: ACCENT, "stroke-width": .8, opacity: .7 }), svgEl("circle", { r: 2.6, fill: "#fff", stroke: ACCENT, "stroke-width": 1 })];
+        const group = svgEl("g", {});
+        group.append(...nodes);
+        glyphAnchorG.insertBefore(group, anchorNodes[0] || null);
+        return { p, nodes, group };
+      });
+      return { glyph: g, fillPath, outlinePath, onCurve, anchorNodes, controls };
+    });
+
+    const HANDLE_POS = [
+      [0, 0], [0.5, 0], [1, 0], [1, 0.5], [1, 1], [0.5, 1], [0, 1], [0, 0.5],
+    ];
+    const handleNodes = HANDLE_POS.map(() => {
+      const r = document.createElementNS(NS, "rect");
+      r.setAttribute("fill", "#fff");
+      r.setAttribute("stroke", ACCENT);
+      r.setAttribute("stroke-width", 1.5);
+      handlesG.appendChild(r);
+      return r;
+    });
+
+    const layerIcons = {
+      frame: '<path d="M3.5 1v10M8.5 1v10M1 3.5h10M1 8.5h10" stroke-width="1.2"/>',
+      name: '<path d="M2 10 C3 4 9 8 10 2" stroke-width="1.2"/><rect x=".8" y="8.8" width="2.4" height="2.4" fill="currentColor" stroke="none"/><rect x="8.8" y=".8" width="2.4" height="2.4" fill="currentColor" stroke="none"/>',
+      statement: '<path d="M2 2.5h8M6 2.5v8" stroke-width="1.3"/>',
+      cta: '<path d="M6 .8 L11.2 6 L6 11.2 L.8 6 Z" stroke-width="1.2"/>',
+      role: '<path d="M6 .8 L11.2 6 L6 11.2 L.8 6 Z" stroke-width="1.2"/>',
+      avail: '<circle cx="6" cy="6" r="3" stroke-width="1.2"/>',
+      comment: '<path d="M2 2h8v6H5l-3 2.5z" stroke-width="1.2" stroke-linejoin="round"/>',
+    };
+    const LAYER_DEFS = [
+      { id: "frame", label: "Home — Desktop", depth: 0 },
+      { id: "name", label: glyphData.text, depth: 1 },
+      { id: "statement", label: "Statement", depth: 1 },
+      { id: "cta", label: "Buttons", depth: 1 },
+      { id: "role", label: "Role", depth: 1 },
+      { id: "avail", label: "Availability", depth: 1 },
+      { id: "comment", label: "Comment · Dimas", depth: 1 },
+    ];
+    const layerRows = {};
+    LAYER_DEFS.forEach((def) => {
+      const row = document.createElement("div");
+      row.className = `flex h-[29px] items-center gap-2 overflow-hidden rounded-md text-[12px] leading-none tracking-[-0.01em] whitespace-nowrap transition-[background,color] duration-[250ms] ${def.depth === 0 ? "font-semibold" : "font-medium"}`;
+      row.style.padding = `0 8px 0 ${8 + def.depth * 16}px`;
+      row.innerHTML = `<svg class="shrink-0" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor">${layerIcons[def.id]}</svg><span class="overflow-hidden text-ellipsis">${def.label}</span>`;
+      layersList.appendChild(row);
+      layerRows[def.id] = row;
+      layerRowIcons[def.id] = row.querySelector('svg');
+    });
+
+    // --- State ---
+    let scale = 1;
+    let size = { width: CANVAS_W, height: CANVAS_H };
+    let mouseScreen = null; // {x,y} in container-local screen px
+    let debugScroll = null;
+    let debugTime = null; // set via window.__ilmantaraHero.render() for deterministic snapshots
+    let lastGlyphLayoutKey = null;
+    let lastGuideKey = null;
+    const guidePool = []; // Reuse at most20 SVG nodes, including animated hover guides.
+    let lastSvgSizeKey = null;
+    // Match the reference: offset the clock reference itself (rather than
+    // special-casing a "skip to end" branch) so a reduced-motion visitor's
+    // very first frame already reads D≈TOTAL_DURATION (settled) and the
+    // normal RAF loop just continues from there.
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let prefersReducedMotion = motionQuery.matches;
+    let startTime = performance.now() - (prefersReducedMotion ? TOTAL_DURATION * 1000 : 0);
+    let rafId = 0;
+    let lastTime = prefersReducedMotion ? TOTAL_DURATION : 0;
+    let visible = true;
+    const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; render(lastTime); requestFrame(); });
+    visibility.observe(container);
+    const editor = createWordmarkEditor({
+      container, svg, surface: document.getElementById("ha-move-surface"),
+      hitGroup: document.getElementById("ha-editor-hitareas"), youCursor,
+      onChange: () => { render(lastTime); requestFrame(); }, signal: abort.signal,
+    });
+    let openThread = null;
+    const commentControls = [
+      { id: 'mara', button: avatar, popup: comment },
+      ...teamNodes.filter(member => member.thread).map(member => ({ id: member.id, button: member.thread.querySelector('[data-team-avatar]'), popup: member.thread.querySelector('[data-team-bubble]') })),
+    ];
+    for (const control of commentControls) {
+      control.popup.setAttribute('role', 'region');
+      control.popup.setAttribute('aria-label', `${control.id} comment`);
+      control.button.addEventListener('click', () => {
+        if (lastTime < TOTAL_DURATION) return;
+        openThread = openThread === control.id ? null : control.id;
+        render(lastTime);
+      }, { signal: abort.signal });
+    }
+    document.addEventListener('pointerdown', event => {
+      if (openThread && !commentControls.some(control => control.button.contains(event.target) || control.popup.contains(event.target))) {
+        openThread = null; render(lastTime);
+      }
+    }, { signal: abort.signal });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && openThread) {
+        const control = commentControls.find(control => control.id === openThread);
+        openThread = null; render(lastTime); control.button.focus();
+      }
+    }, { signal: abort.signal });
+
+    motionQuery.addEventListener("change", () => {
+      prefersReducedMotion = motionQuery.matches;
+      if (prefersReducedMotion && lastTime < TOTAL_DURATION) {
+        startTime = performance.now() - TOTAL_DURATION * 1000;
+        lastTime = TOTAL_DURATION;
+      }
+      render(lastTime); requestFrame();
+    }, { signal: abort.signal });
+
+    function canvasToScreen(x, y, origin, s) {
+      return { x: origin.x + x * s, y: origin.y + y * s };
+    }
+
+    function render(D) {
+      lastTime = D;
+      const bounds = container.getBoundingClientRect();
+      const scroll = prefersReducedMotion ? 0 : debugScroll === null ? clamp(-bounds.top / Math.max(1, bounds.height)) : debugScroll;
+      const q = EASE.out(scroll);
+      const nameOffset = -scroll * 50;
+      artboard.style.transform = `translateY(${-scroll * 30}px) scale(${1 - q * .1})`;
+      svg.style.top = `${nameOffset}px`;
+      const w = container.clientWidth || CANVAS_W;
+      const h = container.clientHeight || CANVAS_H;
+      const mobile = w < 900;
+      const k = mobile ? MOBILE_CANVAS_W : CANVAS_W;
+      const A = mobile ? MOBILE_CANVAS_H : CANVAS_H;
+      const headerH = 56;
+      const innerH = h - headerH;
+      const s = mobile
+        ? Math.min(w / k, Math.max(0.5, h / A))
+        : Math.min(w / CANVAS_W, Math.max(0.3, h / CANVAS_H));
+      const originX = (w - k * s) / 2;
+      const originY = headerH + Math.max(0, (innerH - (A - headerH) * s) / 2) - headerH * s;
+
+      canvas.style.transform = `scale(${s})`;
+      canvas.style.width = `${k}px`;
+      canvas.style.height = `${A}px`;
+      canvas.style.left = `${originX}px`;
+      canvas.style.top = `${originY}px`;
+      const svgSizeKey = `${k}|${A}`;
+      if (svgSizeKey !== lastSvgSizeKey) {
+        svg.setAttribute("width", k);
+        svg.setAttribute("height", A);
+        svg.setAttribute("viewBox", `0 0 ${k} ${A}`);
+        hoverSvg.setAttribute("width", k); hoverSvg.setAttribute("height", A);
+        lastSvgSizeKey = svgSizeKey;
+      }
+
+      const rulerKey = `${w}x${h}x${Math.round(originX * 100)}x${Math.round(originY * 100)}x${Math.round(s * 10000)}`;
+      if (rulerKey !== lastRulerKey) {
+        drawRuler(w, h, originX, originY, s);
+        lastRulerKey = rulerKey;
+      }
+      updateRulerCrosshair(mouseScreen);
+
+      setText(modeLabel, mobile ? "Phone" : "Desktop");
+      setText(dimsLabel, mobile ? "390 × 844" : "1440 × 900");
+      breadcrumb.style.left = `${mobile ? 20 : 44}px`;
+      breadcrumb.style.top = "84px";
+      const breadcrumbOpacity = EASE.out(norm(D, 0, 0.5));
+      breadcrumb.style.opacity = breadcrumbOpacity;
+
+      // --- Glyph layout (row-wrap only matters if the text contains a space on mobile) ---
+      const glyphs = glyphData.glyphs;
+      const chars = Array.from(glyphData.text);
+      const rowOf = [];
+      {
+        let row = 0, n = 0;
+        for (let i = 0; i < chars.length && n < glyphs.length; i++) {
+          if (chars[i] === " ") { if (mobile) row++; continue; }
+          if (glyphs[n] && glyphs[n].ch === chars[i]) { rowOf[n] = row; n++; }
+        }
+        for (; n < glyphs.length; n++) rowOf[n] = row;
+      }
+      const rowMin = [], rowMax = [];
+      glyphs.forEach((g, i) => {
+        const r = rowOf[i];
+        rowMin[r] = Math.min(rowMin[r] ?? Infinity, g.x);
+        rowMax[r] = Math.max(rowMax[r] ?? -Infinity, g.x + g.w);
+      });
+      const rowWidths = rowMin.map((m, i) => rowMax[i] - m);
+      const maxRowWidth = Math.max(1, ...rowWidths);
+      const numRows = rowMin.length;
+
+      const fontPx = mobile ? Math.min(124, (350 * 1000) / maxRowWidth) : 200;
+      const j = fontPx / 1000;
+      const rowHeight = glyphData.cap * j + fontPx * 0.2;
+      const glyphOffX = glyphs.map((g, i) => -rowMin[rowOf[i]] + (maxRowWidth - rowWidths[rowOf[i]]) / 2);
+      const glyphOffY = glyphs.map((g, i) => rowOf[i] * rowHeight);
+
+      const Ye = glyphs.length;
+      const startDelay = 0.35;
+      const stagger = Math.min(0.17, 1.9 / Math.max(1, Ye));
+      const drawDuration = 0.75;
+      const traceEnd = startDelay + stagger * (Ye - 1) + drawDuration;
+      const fillStart = traceEnd - 0.35;
+      const L = traceEnd + 0.35;
+
+      const M = lerp(1, 1.04, EASE.inOut(norm(D, L + BEATS.scaleBumpStart, L + BEATS.scaleBumpEnd)));
+      const blockWidth = maxRowWidth * j;
+      const blockX = k / 2 - blockWidth / 2;
+      const topY = mobile ? 196 : 232;
+      const baselineY = topY + glyphData.cap * j;
+      const glyphX = (i) => blockX + glyphOffX[i] * j;
+      const glyphY = (i) => baselineY + glyphOffY[i];
+      const padX = mobile ? 10 : 14;
+      const totalTextHeight = glyphData.cap * j + (numRows - 1) * rowHeight;
+      const box = { x: blockX - padX, y: topY - 26, w: blockWidth + padX * 2, h: totalTextHeight + 26 + 22 };
+      const boxCx = box.x + box.w / 2, boxCy = box.y + box.h / 2;
+      const selectionMatrix = svg.getScreenCTM();
+      const baselineF = { x: boxCx - (box.w * M) / 2, y: boxCy - (box.h * M) / 2, w: box.w * M, h: box.h * M };
+      const F = editor.resolve(baselineF, { time: D, duration: TOTAL_DURATION, width: k, height: A, screenWidth: w, screenHeight: h, visible, matrix: selectionMatrix, canvasScale: s });
+      const editX = F.w / baselineF.w, editY = F.h / baselineF.h;
+      const glyphAffine = `matrix(${editX} 0 0 ${editY} ${F.x - editX * baselineF.x} ${F.y - editY * baselineF.y}) translate(${boxCx} ${boxCy}) scale(${M}) translate(${-boxCx} ${-boxCy})`;
+      if (glyphScaleG.getAttribute("transform") !== glyphAffine) glyphScaleG.setAttribute("transform", glyphAffine);
+
+      // --- Pen-trace + fill per glyph ---
+      let penCursorPos = null;
+      const anchorFade = 1 - norm(D, L - .2, L + .3);
+      anchorsG.style.opacity = anchorFade;
+      anchorsG.style.display = anchorFade > 0 ? "inline" : "none";
+      let activeTraceIndex = -1;
+      glyphs.forEach((_, i) => { const p = norm(D, startDelay + i * stagger, startDelay + i * stagger + drawDuration); if (p > 0 && p < 1) activeTraceIndex = i; });
+      const glyphLayoutKey = [mobile, k, j, blockX, baselineY].join("|");
+      const glyphsSettled = D >= L + .5;
+      // Manual edits transform the outer group. Settled paths/hidden pen
+      // controls change only with responsive layout or a debug time rewind.
+      if (!glyphsSettled || lastGlyphLayoutKey !== glyphLayoutKey) glyphNodes.forEach(({ glyph: g, fillPath, outlinePath, onCurve, anchorNodes, controls }, i) => {
+        const tx = glyphX(i), ty = glyphY(i);
+        const tf = `translate(${tx} ${ty}) scale(${j})`;
+        fillPath.setAttribute("transform", tf);
+        outlinePath.setAttribute("transform", tf);
+
+        const t0 = startDelay + i * stagger;
+        const traceProgress = norm(D, t0, t0 + drawDuration);
+        const traceR = EASE.inOut(traceProgress);
+        const fillOp = EASE.out(norm(D, fillStart + i * 0.03, L + i * 0.03));
+
+        fillPath.setAttribute("fill-opacity", fillOp);
+        const showOutline = traceR > 0 && fillOp < 1;
+        outlinePath.style.opacity = showOutline ? 1 - fillOp : 0;
+        outlinePath.setAttribute("stroke-dashoffset", 1 - traceR);
+        outlinePath.setAttribute("stroke-width", 1.6 / j);
+
+        const anchorsOpacity = clamp(1 - norm(D, L - 0.2, L + 0.3));
+        const revealCount = Math.ceil(clamp(traceProgress) * onCurve.length);
+        anchorNodes.forEach((node, ai) => {
+          if (ai < revealCount && anchorsOpacity > 0) {
+            const p = onCurve[ai];
+            const active = i === activeTraceIndex && ai === revealCount - 1;
+            const size = active ? 7 : 5;
+            node.setAttribute("width", size);
+            node.setAttribute("height", size);
+            node.setAttribute("fill", active ? ACCENT : "#fff");
+            node.setAttribute("x", tx + p[0] * j - size / 2);
+            node.setAttribute("y", ty + p[1] * j - size / 2);
+            node.style.display = "inline";
+            node.style.opacity = 1;
+          } else {
+            node.style.display = "none";
+            node.style.opacity = 0;
+          }
+        });
+
+        const controlCount = Math.ceil(traceProgress * controls.length);
+        controls.forEach(({ p, nodes, group }, ci) => {
+          const shown = i === activeTraceIndex && ci < controlCount && ci >= controlCount - 6;
+          group.style.display = shown ? "inline" : "none";
+          if (!shown) return;
+          const x = tx + p[0] * j, y = ty + p[1] * j;
+          const coords = [[tx + p[3] * j, ty + p[4] * j, x, y], [x, y, tx + p[5] * j, ty + p[6] * j]];
+          coords.forEach(([x1, y1, x2, y2], ni) => { for (const [key, value] of Object.entries({ x1, y1, x2, y2 })) nodes[ni].setAttribute(key, value); });
+          nodes[2].setAttribute("cx", x); nodes[2].setAttribute("cy", y);
+        });
+
+        // This is the glyph currently being traced (progress strictly between
+        // 0 and 1) — the pen cursor follows its current on-curve point.
+        if (traceProgress > 0 && traceProgress < 1 && onCurve.length) {
+          const p = onCurve[Math.min(onCurve.length - 1, Math.floor(traceProgress * onCurve.length))];
+          penCursorPos = { x: tx + p[0] * j, y: ty + p[1] * j };
+        }
+      });
+      lastGlyphLayoutKey = glyphsSettled ? glyphLayoutKey : null;
+      if (penCursorPos) {
+        penCursor.style.opacity = 1;
+        positionAbs(penCursor, penCursorPos.x, penCursorPos.y + nameOffset);
+      } else {
+        penCursor.style.opacity = 0;
+      }
+
+      // --- Selection box ---
+      const tt = EASE.expo(norm(D, L - 0.1, L + 0.45));
+      selBoxG.style.opacity = tt;
+      const ruler = document.getElementById("ha-ruler");
+      ruler.style.opacity = breadcrumbOpacity;
+      vRulerSvg.style.display = mobile ? "none" : "block";
+      for (const el of [hSelection, vSelection]) el.style.display = D > L ? "block" : "none";
+      const selectionStart = new DOMPoint(F.x, F.y).matrixTransform(selectionMatrix);
+      const selectionEnd = new DOMPoint(F.x + F.w, F.y + F.h).matrixTransform(selectionMatrix);
+      hSelection.setAttribute("x", selectionStart.x - bounds.left); hSelection.setAttribute("width", selectionEnd.x - selectionStart.x);
+      vSelection.setAttribute("y", selectionStart.y - bounds.top - 76); vSelection.setAttribute("height", selectionEnd.y - selectionStart.y);
+      container.firstElementChild.style.backgroundSize = `${24 * s * (1 - q * .12)}px ${24 * s * (1 - q * .12)}px`;
+      container.firstElementChild.style.backgroundPosition = `${originX}px ${originY - scroll * 40}px`;
+      selRect.setAttribute("x", F.x);
+      selRect.setAttribute("y", F.y);
+      selRect.setAttribute("width", F.w);
+      selRect.setAttribute("height", F.h);
+      handleNodes.forEach((node, i) => {
+        const [hx, hy] = HANDLE_POS[i];
+        const sz = 9 * EASE.back(norm(D, L + i * 0.04, L + 0.3 + i * 0.04));
+        node.setAttribute("x", F.x + F.w * hx - sz / 2);
+        node.setAttribute("y", F.y + F.h * hy - sz / 2);
+        node.setAttribute("width", Math.max(0, sz));
+        node.setAttribute("height", Math.max(0, sz));
+      });
+      const resizing = D > L + BEATS.toolScaleStart && D < L + BEATS.toolScaleEnd;
+      dimLabel.style.background = resizing ? "#10B37A" : ACCENT;
+      dimLabel.style.opacity = tt;
+      dimLabel.style.left = `${F.x + F.w / 2}px`;
+      dimLabel.style.top = `${F.y + F.h + 10 + nameOffset}px`;
+      dimLabel.style.transform = `translateX(-50%) scale(${0.8 + 0.2 * tt})`;
+      setText(dimLabel, `${round(F.w)} × ${round(F.h)}`);
+      editor.syncHitAreas();
+
+      // Measure responsive text only when its layout changes, never every RAF.
+      const contentKey = `${mobile}|${k}`;
+      if (contentLayout.key !== contentKey) {
+        statement.style.width = `${mobile ? 380 : 840}px`;
+        statement.style.left = `${mobile ? 20 : 300}px`;
+        cta.style.width = `${k}px`;
+        contentLayout.height = statement.offsetHeight;
+        contentLayout.ctaHeight = cta.offsetHeight;
+        const ctaSecondary = document.getElementById("ha-cta-secondary");
+        contentLayout.ctaWidth = ctaPrimary.offsetWidth + (ctaSecondary ? ctaSecondary.offsetWidth + 10 : 0);
+        contentLayout.roleHeight = roleEl.offsetHeight;
+        contentLayout.availHeight = availEl.offsetHeight;
+        contentLayout.key = contentKey;
+      }
+      const statementY = mobile ? box.y + box.h + 44 : 454;
+      const ctaY = statementY + contentLayout.height + (mobile ? 24 : 22);
+      // One composite floating pose owns parallax, idle and hover lift.
+      const now = performance.now(), motionDt = Math.min(64, Math.max(0, now - lastMotionTick));
+      lastMotionTick = now;
+      const blend = 1 - Math.exp(-motionDt / 120);
+      const pointer = mouseScreen && !editor.isTouch() ? { x: (mouseScreen.x - originX) / s, y: (mouseScreen.y - originY) / s } : null;
+      const mouseNorm = pointer ? { x: clamp((pointer.x - k / 2) / (k / 2), -1, 1), y: clamp((pointer.y - A / 2) / (A / 2), -1, 1) } : { x: 0, y: 0 };
+      parallax.x += (mouseNorm.x - parallax.x) * blend;
+      parallax.y += (mouseNorm.y - parallax.y) * blend;
+      const idleTime = Math.max(0, D - TOTAL_DURATION);
+      const idleGain = prefersReducedMotion ? 0 : EASE.inOut(norm(idleTime, 0, 1.2));
+      for (const state of Object.values(floating)) {
+        state.lift = prefersReducedMotion ? 0 : lerp(state.lift, state.hovered ? 3 : 0, blend);
+        state.x = prefersReducedMotion ? 0 : Math.sin(idleTime * (.55 + state.index * .07) + state.index * 1.4) * 3 * idleGain - parallax.x * state.depth;
+        state.y = prefersReducedMotion ? 0 : Math.cos(idleTime * (.42 + state.index * .09) + state.index * 1.1) * 4 * idleGain - parallax.y * state.depth - state.lift;
+      }
+      const floatTransform = id => `translate(${floating[id].x}px, ${floating[id].y}px)`;
+      const roleBox = mobile
+        ? { x: 24, y: ctaY + 128, w: 172 }
+        : { x: 304, y: Math.max(664, ctaY + contentLayout.ctaHeight + 48), w: 208 };
+      const availBox = mobile
+        ? { x: 218, y: ctaY + 120, sc: 0.86 }
+        : { x: 930, y: Math.max(648, ctaY + contentLayout.ctaHeight + 32), sc: 1 };
+
+      const en = fadeIn(D, 0.15);
+      statement.style.top = `${statementY + en.dy}px`;
+      statement.style.opacity = en.o;
+      statement.style.filter = `blur(${en.blur}px)`;
+
+      const tn = fadeIn(D, 0.3);
+      cta.style.width = `${k}px`;
+      // Naya nudges the CTA group, then restores the exact resting layout.
+      const nayaWorking = D >= 17 && D < 20;
+      const ctaNudge = -4 * Math.sin(Math.PI * EASE.inOut(norm(D, 17.6, 19.4)));
+      cta.style.top = `${ctaY + tn.dy + ctaNudge}px`;
+      cta.style.opacity = tn.o;
+
+      const nn = fadeIn(D, L + 0.5);
+      roleEl.style.left = `${roleBox.x - q * 260}px`;
+      roleEl.style.top = `${roleBox.y - q * 60 + nn.dy}px`;
+      roleEl.style.transform = floatTransform('role');
+      roleEl.style.opacity = nn.o;
+
+      const rn = fadeIn(D, L + 0.62);
+      availEl.style.left = `${availBox.x + q * 300}px`;
+      availEl.style.top = `${availBox.y - q * 120 + rn.dy}px`;
+      availEl.style.transform = `${floatTransform('avail')} scale(${availBox.sc})`;
+      availEl.style.transformOrigin = "0 0";
+      availEl.style.opacity = rn.o;
+
+      // --- Dimas story: cursor arrival, comment bubble, typed text ---
+      // Apply only the manual affine to the original avatar anchor. Identity
+      // must preserve its intro position exactly, including at the 25s unlock.
+      const Dt = {
+        x: F.x + (box.x + box.w - (mobile ? 40 : 150) - baselineF.x) * editX,
+        y: F.y + (box.y + 30 - baselineF.y) * editY,
+      };
+      const arriveT = EASE.inOut(norm(D, L + BEATS.maraArriveStart, L + BEATS.maraArriveEnd));
+      let maraPos = { x: lerp(mobile ? 470 : 1520, Dt.x + 6, arriveT), y: lerp(mobile ? 420 : 520, Dt.y + 4, arriveT) };
+      if (D > L + BEATS.maraDepartStart) {
+        const e = EASE.inOut(norm(D, L + BEATS.maraDepartStart, L + BEATS.maraDepartEnd));
+        const kt = Math.max(0, D - (L + BEATS.wobbleBase));
+        const mI = mobile ? { x: 318, y: ctaY + contentLayout.ctaHeight + 38 } : { x: 1296, y: 470 };
+        maraPos = {
+          x: lerp(Dt.x + 6, mI.x, e) + Math.sin(kt * 0.9) * (prefersReducedMotion ? 0 : 10) * e,
+          y: lerp(Dt.y + 4, mI.y, e) + Math.cos(kt * 0.7) * (prefersReducedMotion ? 0 : 8) * e,
+        };
+      }
+      const maraVisible = D > L + BEATS.maraArriveStart;
+      const pulse = D > L + BEATS.commentPulseStart && D < L + BEATS.commentPulseEnd ? 1 - Math.abs(D - (L + off(5.1))) / .15 : 0;
+      positionAbs(commentPulse, Dt.x - 16, Dt.y - 16 + nameOffset);
+      commentPulse.style.opacity = pulse;
+      commentPulse.style.transform = `scale(${1.6 - pulse * .6})`;
+      positionAbs(maraCursor, maraPos.x, maraPos.y);
+      maraCursor.style.opacity = maraVisible ? 1 : 0;
+
+      // Thread anchor sits at Dt; the avatar pops in there (back-ease W), the
+      // comment+reply card hangs off it to the left, and at D=10.4-10.9s (K)
+      // the whole card collapses back into the avatar + an unread badge.
+      const W = EASE.back(norm(D, L + BEATS.commentScaleStart, L + BEATS.commentScaleEnd));
+      const K = EASE.inOut(norm(D, L + BEATS.collapseStart, L + BEATS.collapseEnd));
+      positionAbs(threadAnchor, Dt.x, Dt.y + nameOffset);
+      threadAnchor.style.opacity = 1;
+      avatar.style.transform = `scale(${W})`;
+      avatar.style.transformOrigin = "0 100%";
+      threadBadge.style.opacity = K > 0 ? 1 : 0;
+      threadBadge.style.transform = `scale(${K})`;
+      const maraOpen = D >= TOTAL_DURATION && openThread === 'mara';
+      comment.style.opacity = maraOpen ? 1 : clamp(1 - K);
+      comment.style.transform = `scale(${maraOpen ? 1 : W * (1 - K)})`;
+      if (D >= TOTAL_DURATION) {
+        const anchorX = Dt.x, anchorY = Dt.y + nameOffset;
+        comment.style.left = `${clamp(anchorX - 290, 12, k - 274) - anchorX}px`;
+        comment.style.top = `${clamp(anchorY - 6, 84, A - comment.offsetHeight - 16) - anchorY}px`;
+      } else { comment.style.left = ''; comment.style.top = ''; }
+      comment.style.transformOrigin = "100% 0";
+
+      const typeProgress = Math.floor(clamp(norm(D, L + BEATS.typeStart, L + BEATS.typeEnd)) * COMMENT_TEXT.length);
+      setText(commentText, COMMENT_TEXT.slice(0, typeProgress));
+      commentCaret.style.display = typeProgress < COMMENT_TEXT.length ? "inline-block" : "none";
+      replyBlock.style.display = GatedReply(D, L) ? "block" : "none";
+
+      const G = EASE.back(norm(D, L + BEATS.replyBackStart, L + BEATS.replyBackEnd));
+      replyBlock.style.opacity = G > 0 ? clamp(G) : 0;
+      replyBlock.style.transform = `translateY(${(1 - clamp(G)) * 6}px)`;
+
+      // --- Theo story: second cursor drags resize handle ---
+      const Mt = { x: F.x + F.w, y: F.y + F.h };
+      const approach = EASE.inOut(norm(D, L + BEATS.secondApproachStart, L + BEATS.secondApproachEnd));
+      const tS = mobile ? { x: 180, y: 940 } : { x: 1040, y: 980 };
+      let theoPos = { x: lerp(tS.x, Mt.x, approach), y: lerp(tS.y, Mt.y, approach) };
+      if (D > L + BEATS.secondApproachEnd) theoPos = { x: Mt.x, y: Mt.y };
+      const Ft = { x: F.x + (mobile ? 60 : 170), y: boxCy + 6 };
+      const It = { x: F.x + F.w - (mobile ? 70 : 190), y: boxCy - 10 };
+      if (D > L + BEATS.secondToFtStart) {
+        const e = EASE.inOut(norm(D, L + BEATS.secondToFtStart, L + BEATS.secondToFtEnd));
+        theoPos = { x: lerp(Mt.x, Ft.x, e), y: lerp(Mt.y, Ft.y, e) };
+      }
+      if (D > L + BEATS.secondToFtEnd) {
+        const e = EASE.inOut(norm(D, L + BEATS.secondArcStart, L + BEATS.secondArcEnd));
+        theoPos = { x: lerp(Ft.x, It.x, e), y: Ft.y + (It.y - Ft.y) * e + Math.sin(e * Math.PI) * -28 };
+      }
+      const tI = mobile ? { x: 70, y: ctaY + contentLayout.ctaHeight + 58 } : { x: 1060, y: 560 };
+      if (D > L + BEATS.secondArcEnd) {
+        const e = EASE.inOut(norm(D, L + BEATS.secondFinalStart, L + BEATS.secondFinalEnd));
+        const t = Math.max(0, D - (L + BEATS.secondFinalEnd));
+        theoPos = {
+          x: lerp(It.x, tI.x, e) + Math.sin(t * 0.8 + 1) * (prefersReducedMotion ? 0 : 9) * e,
+          y: lerp(It.y, tI.y, e) + Math.cos(t * 0.6) * (prefersReducedMotion ? 0 : 7) * e,
+        };
+      }
+      const theoVisible = D > L + BEATS.secondApproachStart;
+      positionAbs(theoCursor, theoPos.x, theoPos.y + nameOffset);
+      theoCursor.style.opacity = theoVisible ? 1 : 0;
+
+      // --- Toolbar / active-tool for layer highlighting ---
+      const rakaWorking = D >= 13 && D < 16.5;
+      const dimasWorking = D >= 20.5 && D < 24.5;
+      const tool = editor.snapshot().phase === "restoring" ? "scale" : editor.isDragging() ? (editor.cursorMode() === "grabbing" ? "move" : "scale") : rakaWorking || dimasWorking ? "comment" : D < traceEnd ? "pen" : D > L + BEATS.toolCommentStart && D < L + BEATS.toolCommentEnd ? "comment" : D > L + BEATS.toolScaleStart && D < L + BEATS.toolScaleEnd ? "scale" : "move";
+
+      // --- Hover hit-testing (canvas-space) ---
+      let hovered = null;
+      let hoverBox = null;
+      let cursorCanvasPos = null;
+      const boxes = [
+        { id: "name", x: F.x, y: F.y + nameOffset, w: F.w, h: F.h, label: "Name / vector" },
+        { id: "statement", x: mobile ? 20 : 300, y: statementY, w: mobile ? 380 : 840, h: contentLayout.height, label: "Statement" },
+        { id: "cta", x: (k - contentLayout.ctaWidth) / 2, y: ctaY + ctaNudge, w: contentLayout.ctaWidth, h: contentLayout.ctaHeight, label: "Buttons" },
+      ];
+      const scriptedBox = nayaWorking ? boxes.find((b) => b.id === "cta") : null;
+      if (mouseScreen) {
+        const cx = (mouseScreen.x - originX) / s, cy = (mouseScreen.y - originY) / s;
+        cursorCanvasPos = { x: cx, y: cy };
+        const hitPoint = new DOMPoint(bounds.left + mouseScreen.x, bounds.top + mouseScreen.y).matrixTransform(selectionMatrix.inverse());
+        hitPoint.y += nameOffset;
+        hoverBox = D > ORIGINAL_DURATION - 1 ? boxes.find((b) => hitPoint.x >= b.x && hitPoint.x <= b.x + b.w && hitPoint.y >= b.y && hitPoint.y <= b.y + b.h) : null;
+        hovered = hoverBox?.id || null;
+        youCursor.classList.toggle("hidden", editor.isTouch());
+        positionAbs(youCursor, cx, cy);
+        const youLabel = youCursor.lastElementChild;
+        youLabel.style.left = `${Math.min(14, bounds.width - mouseScreen.x - youLabel.offsetWidth - 8)}px`;
+        youLabel.style.top = `${Math.min(17, bounds.height - mouseScreen.y - youLabel.offsetHeight - 8)}px`;
+      } else youCursor.classList.add("hidden");
+      // Real pointer feedback takes priority over the collaborators' simulated selection.
+      const editorWorking = editor.isDragging() || editor.snapshot().phase === "restoring";
+      hoverBox = openThread && !editorWorking ? null : editorWorking || editor.cursorMode().includes("resize") ? boxes[0] : hoverBox || scriptedBox;
+      hovered = hoverBox?.id || null;
+
+      // New collaborators act one at a time after the original Mara/Theo story.
+      const actions = [
+        { start: 13, end: 16.5, target: { x: F.x + F.w - (mobile ? 100 : 220), y: F.y + 10 }, rest: { x: mobile ? 230 : 350, y: mobile ? 94 : 130 } },
+        { start: 17, end: 20, target: { x: mobile ? 200 : 716, y: ctaY + 14 + ctaNudge }, rest: { x: mobile ? 24 : 730, y: mobile ? ctaY + 276 : ctaY + 76 } },
+        { start: 20.5, end: 24.5, target: { x: mobile ? 210 : 720, y: ctaY + 24 }, rest: { x: mobile ? 220 : 980, y: ctaY + 150 } },
+      ];
+      teamNodes.forEach((member, i) => {
+        const action = actions[i];
+        const arrive = EASE.inOut(norm(D, action.start, action.start + .8));
+        const depart = EASE.inOut(norm(D, action.end - .8, action.end));
+        const enter = { x: mobile ? (i === 1 ? -30 : 450) : 1500, y: action.target.y + 100 };
+        const idleTime = Math.max(0, D - action.end);
+        const idleGain = prefersReducedMotion ? 0 : EASE.inOut(norm(idleTime, 0, .8));
+        const idleX = Math.sin(idleTime * (.72 + i * .13) + i * 1.7) * (i === 1 ? 8 : 10) * idleGain;
+        const idleY = Math.cos(idleTime * (.57 + i * .11) + i * 1.3) * 7 * idleGain;
+        const x = lerp(lerp(enter.x, action.target.x, arrive), action.rest.x, depart) + idleX;
+        const y = lerp(lerp(enter.y, action.target.y, arrive), action.rest.y, depart) + idleY;
+        // Repair blends from/to the current drifting rest point; its grip remains exact.
+        const restScreen = { x: bounds.left + originX + (action.rest.x + idleX) * s, y: bounds.top + originY + (action.rest.y + idleY) * s };
+        const repairingCursor = i === 1 ? editor.repairCursor(restScreen) : null;
+        if (i === 1) paintActionCursor(member.cursor, repairingCursor?.mode || 'default', member.color);
+        const cursorX = repairingCursor ? (repairingCursor.x - bounds.left - originX) / s : x;
+        const cursorY = repairingCursor ? (repairingCursor.y - bounds.top - originY) / s : y;
+        positionAbs(member.cursor, cursorX, cursorY);
+        member.cursor.style.opacity = EASE.out(norm(D, action.start, action.start + .3));
+        const label = member.cursor.querySelector("[data-team-label]");
+        setText(label, `${member.name}`);
+        // Keep the label inside the artboard even while its pointer is near the edge.
+        label.style.left = `${Math.min(14, k - cursorX - label.offsetWidth - 16)}px`;
+        if (member.thread) {
+          const pop = EASE.back(norm(D, action.start + .85, action.start + 1.2));
+          const collapse = EASE.inOut(norm(D, action.end - .75, action.end - .15));
+          const threadRight = clamp(action.target.x, 284, k - 20);
+          const threadY = action.target.y + 26;
+          positionAbs(member.thread, threadRight - 260, threadY);
+          member.thread.style.opacity = pop > 0 ? 1 : 0;
+          member.thread.querySelector("[data-team-avatar]").style.transform = `scale(${Math.max(0, pop)})`;
+          const bubble = member.thread.querySelector("[data-team-bubble]");
+          const userOpen = D >= TOTAL_DURATION && openThread === member.id;
+          bubble.style.opacity = userOpen ? 1 : 1 - collapse;
+          bubble.style.transform = `scale(${userOpen ? 1 : Math.max(0, pop) * (1 - collapse)})`;
+          if (D >= TOTAL_DURATION) {
+            member.thread.removeAttribute('aria-hidden');
+            // Keep the avatar anchor fixed; clamp only the reopened card.
+            bubble.style.left = `${clamp(threadRight - 260, 12, k - 272) - (threadRight - 260)}px`;
+            bubble.style.top = `${clamp(threadY, 84, A - bubble.offsetHeight - 16) - threadY}px`;
+          }
+        }
+      });
+      for (const control of commentControls) {
+        const enabled = D >= TOTAL_DURATION;
+        const opened = enabled && openThread === control.id;
+        control.button.disabled = !enabled;
+        control.button.tabIndex = enabled ? 0 : -1;
+        control.button.setAttribute('aria-expanded', String(opened));
+        control.button.classList.toggle('pointer-events-auto', enabled);
+        control.button.classList.toggle('pointer-events-none', !enabled);
+        control.popup.classList.toggle('pointer-events-auto', opened);
+        control.popup.classList.toggle('invisible', enabled && !opened);
+        control.popup.inert = !opened;
+        control.popup.setAttribute('aria-hidden', String(!opened));
+      }
+      container.dataset.openComment = openThread || '';
+      container.dataset.teamAction = editor.snapshot().phase === "restoring" ? "naya-restore" : rakaWorking ? "raka" : nayaWorking ? "naya" : dimasWorking ? "dimas" : "idle";
+      dimLabel.style.opacity = tt * (hovered === "name" && !editorWorking ? 0 : 1);
+      const pan = depth => prefersReducedMotion ? 'translate(0px, 0px)' : `translate(${-parallax.x * depth}px, ${-parallax.y * depth}px)`;
+
+      // hover box + guides
+      if (hoverBox && hoverBox.id !== "name") {
+        hoverBoxG.style.opacity = 1;
+        hoverRect.setAttribute("x", hoverBox.x - 1);
+        hoverRect.setAttribute("y", hoverBox.y - 1);
+        hoverRect.setAttribute("width", hoverBox.w + 2);
+        hoverRect.setAttribute("height", hoverBox.h + 2);
+      } else {
+        hoverBoxG.style.opacity = 0;
+      }
+      renderGuides(editorWorking || hoverBox?.id === 'name' ? null : hoverBox, k, A);
+      if (hoverBox) {
+        hoverLabel.style.opacity = hoverBox.id === "name" ? 0 : 1;
+        hoverLabel.setAttribute("x", hoverBox.x);
+        hoverLabel.setAttribute("y", hoverBox.y - 8);
+        setText(hoverLabel, hoverBox.label);
+      } else {
+        hoverLabel.style.opacity = 0;
+      }
+
+      // --- Layer panel + inspect panel highlight (desktop only) ---
+      // These chrome panels fade in only after the name has settled (reference's `an`).
+      const panelOpacity = EASE.expo(norm(D, L + 0.1, L + 1)); // Layers/Inspect: "an"
+      const toolbarOpacity = EASE.expo(norm(D, 0, 0.6)); // Toolbar: "on" (fades in immediately, like the ruler)
+      layersPanel.style.display = mobile ? "none" : "block";
+      inspectPanel.style.display = mobile ? "none" : "block";
+      toolbar.style.display = mobile ? "none" : "flex";
+      layersPanel.style.opacity = panelOpacity * (1 - q);
+      inspectPanel.style.opacity = panelOpacity * (1 - q);
+      toolbar.style.opacity = toolbarOpacity * (1 - q);
+      layersPanel.style.transform = `translateX(${(1 - panelOpacity) * -40 - q * 340}px) ${floatTransform('layers')}`;
+      inspectPanel.style.transform = `translateX(${(1 - panelOpacity) * 40 + q * 340}px) ${floatTransform('inspect')}`;
+      toolbar.style.top = `${A - 58 + (1 - toolbarOpacity) * 30}px`;
+      if (!mobile) {
+        const panelState = `${hovered}|${D < .35}|${D >= .35 && D < ORIGINAL_DURATION}|${D > 5 && D < 6.4}`;
+        if (panelState !== lastPanelState) Object.entries(layerRows).forEach(([id, row]) => {
+          const active = id === "frame" ? D < .35 : hovered ? id === hovered : id === "name" ? D >= .35 && D < ORIGINAL_DURATION : id === "comment" && D > 5 && D < 6.4;
+          // The served rgb accent + hex-alpha suffix is invalid in the original;
+          // match its actual transparent background, not an invented highlight.
+          row.style.color = active ? ACCENT : "#0C0C0E";
+          layerRowIcons[id].style.color = active ? ACCENT : "rgba(12,12,14,.55)";
+        });
+        lastPanelState = panelState;
+        const activeBox = editor.isDragging() || editor.snapshot().phase === "restoring" ? boxes[0] : hoverBox || (D > L ? boxes[0] : null);
+        if (activeBox) {
+          setText(inspectName, activeBox.id === "name" ? "Name / vector" : activeBox.label);
+          // Inspect panel shows coords relative to the ruler's zero point
+          // (past the 20px corner gutter / 56px header), not raw canvas x/y.
+          setText(inspectX, round(activeBox.x - 20));
+          setText(inspectY, round(activeBox.y - 56));
+          setText(inspectW, round(activeBox.w));
+          setText(inspectH, round(activeBox.h));
+        } else {
+          setText(inspectName, "Nothing selected");
+          for (const el of [inspectX, inspectY, inspectW, inspectH]) setText(el, "–");
+        }
+        setText(inspectFontSize, round(200 * M * editY));
+        for (const id of ["ha-field-w", "ha-field-h", "ha-field-font"]) {
+          const field = document.getElementById(id);
+          field.style.background = resizing ? "rgba(16,179,122,.1)" : "";
+          field.style.color = resizing ? "#10B37A" : "";
+        }
+        document.getElementById("ha-inspect-swatch").style.backgroundImage = "none";
+        setText(document.getElementById("ha-inspect-fill"), "RGB(12, 12, 14)");
+        setText(document.getElementById("ha-inspect-fill-detail"), "100%");
+
+        if (tool !== lastTool) Object.entries(toolButtons).forEach(([id, btn]) => {
+          btn.classList.add("transition-[background]", "duration-200", "cursor-none");
+          const active = id === tool;
+          btn.style.background = active ? ACCENT : "transparent";
+          btn.querySelectorAll("svg path, svg circle").forEach((p) => p.setAttribute("stroke", active ? "#fff" : "#0C0C0E"));
+        });
+        lastTool = tool;
+      }
+
+      function renderGuides(hoverBox, k, A) {
+        const key = hoverBox ? [hoverBox.id, k, A, ...boxes.flatMap(b => [b.id, round(b.x), round(b.y), round(b.w), round(b.h)])].join("|") : "none";
+        if (key === lastGuideKey) return;
+        lastGuideKey = key;
+        if (!hoverBox) { guidesG.replaceChildren(); return; }
+        const b = hoverBox;
+        let left = 20, right = k, top = 56, bottom = A;
+        const overlap = (a, b, c, d) => Math.min(b, d) - Math.max(a, c) > 0;
+        for (const other of boxes.filter((other) => other !== b)) {
+          if (overlap(b.y, b.y + b.h, other.y, other.y + other.h)) {
+            if (other.x + other.w <= b.x) left = Math.max(left, other.x + other.w);
+            if (other.x >= b.x + b.w) right = Math.min(right, other.x);
+          }
+          if (overlap(b.x, b.x + b.w, other.x, other.x + other.w)) {
+            if (other.y + other.h <= b.y) top = Math.max(top, other.y + other.h);
+            if (other.y >= b.y + b.h) bottom = Math.min(bottom, other.y);
+          }
+        }
+        const cy = b.y + b.h / 2, cx = b.x + b.w / 2;
+        const edges = [
+          { v: b.x - left, line: [left, cy, b.x, cy] },
+          { v: right - b.x - b.w, line: [b.x + b.w, cy, right, cy] },
+          { v: b.y - top, line: [cx, top, cx, b.y] },
+          { v: bottom - b.y - b.h, line: [cx, b.y + b.h, cx, bottom] },
+        ];
+        const setAttrs = (node, attrs) => { for (const [key, value] of Object.entries(attrs)) if (node.getAttribute(key) !== String(value)) node.setAttribute(key, value); };
+        edges.forEach((e, index) => {
+          const nodes = guidePool[index] ||= [
+            ...Array.from({ length: 3 }, () => svgEl('line', { stroke: GUIDE_COLOR, 'stroke-width': 1 })),
+            svgEl('rect', { width: 34, height: 18, rx: 4, fill: GUIDE_COLOR }),
+            svgEl('text', { 'text-anchor': 'middle', fill: '#fff', 'font-size': 10, 'font-family': "'Geist Mono', monospace", 'font-weight': 500 }),
+          ];
+          if (e.v <= 2) { nodes.forEach(n => n.remove()); return; }
+          if (!nodes[0].isConnected) guidesG.append(...nodes);
+          const [x1, y1, x2, y2] = e.line, horizontal = y1 === y2;
+          setAttrs(nodes[0], { x1, y1, x2, y2 });
+          [[x1, y1], [x2, y2]].forEach(([x, y], i) => setAttrs(nodes[i + 1], { x1: x - (horizontal ? 0 : 4), y1: y - (horizontal ? 4 : 0), x2: x + (horizontal ? 0 : 4), y2: y + (horizontal ? 4 : 0) }));
+          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+          setAttrs(nodes[3], { x: mx - 17, y: my - 9 });
+          setAttrs(nodes[4], { x: mx, y: my + 4 }); setText(nodes[4], round(e.v));
+        });
+      }
+
+      function canvasScaleForDom() { return s; }
+    }
+
+    // All these elements are children of #ha-canvas, which already carries
+    // the scale()/left/top transform for the whole canvas — so children are
+    // positioned in raw canvas-space px, not screen px. Only the mouse
+    // (which arrives in real screen px from pointermove) needs the manual
+    // (screenPx - origin) / s conversion before being used here.
+    function positionAbs(el, x, y, alignRight) {
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.transform = alignRight ? `translateX(-100%)` : "";
+    }
+
+    function GatedReply(D, L) { return D > L + BEATS.replyBackStart; }
+
+    function fadeIn(D, start) {
+      const o = EASE.out(norm(D, start, start + 0.8));
+      return { o, dy: (1 - o) * 16, blur: (1 - o) * 6 };
+    }
+
+    function requestFrame() { if (!rafId && !abort.signal.aborted && !document.hidden) rafId = requestAnimationFrame(frame); }
+    function frame() {
+      rafId = 0;
+      const D = debugTime !== null ? debugTime : (performance.now() - startTime) / 1000;
+      // Only animate while the hero is actually on screen. The intro is
+      // 25 s long, so the old `!visible && D > TOTAL_DURATION` guard kept a
+      // full-scene render running every frame for the first 25 s even after
+      // the hero had been scrolled far out of view — that stole main-thread
+      // time from every scroll further down the page. The IntersectionObserver
+      // (re)starts the loop via requestFrame() when the hero comes back.
+      if (!visible || document.hidden) return;
+      const state = editor.snapshot();
+      if (prefersReducedMotion && D > TOTAL_DURATION + 1 && debugTime === null && !state.dirty && !editor.isDragging() && !editor.isLocked()) return;
+      render(D); requestFrame();
+    }
+    document.addEventListener('visibilitychange', requestFrame, { signal: abort.signal });
+
+    container.addEventListener("pointermove", (e) => {
+      const rect = container.getBoundingClientRect();
+      mouseScreen = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      if (prefersReducedMotion) render(lastTime);
+    }, { signal: abort.signal });
+    container.addEventListener("pointerleave", () => { mouseScreen = null; if (prefersReducedMotion) render(lastTime); }, { signal: abort.signal });
+    const resize = new ResizeObserver(() => render(lastTime));
+    resize.observe(container);
+    const contentResize = new ResizeObserver(() => { contentLayout.key = null; render(lastTime); });
+    contentResize.observe(statement); contentResize.observe(cta);
+    // Scroll drives the hero's exit transition, but frame() already re-renders
+    // every frame while the hero is on screen — so scrolling only needs to make
+    // sure the loop is running. requestFrame() is a no-op while it is (guarded
+    // by rafId), which avoids scheduling a second full render per frame.
+    window.addEventListener("scroll", requestFrame, { passive: true, signal: abort.signal });
+
+    const heroApi = {
+      ready: Promise.resolve(true),
+      render: (t, p = 0, x, y) => {
+        debugTime = t; debugScroll = clamp(p);
+        if (x !== undefined && y !== undefined && x !== null && x >= 0) mouseScreen = { x, y };
+        else if (x !== undefined) mouseScreen = null;
+        render(t);
+      },
+      resume: () => { debugTime = null; debugScroll = null; requestFrame(); },
+      state: () => ({ time: lastTime, reducedMotion: prefersReducedMotion, visible }),
+      editor: () => editor.snapshot(),
+    };
+    window.__ilmantaraHero = heroApi;
+    function dispose() {
+      if (window.__ilmantaraHero === heroApi) delete window.__ilmantaraHero;
+      editor.dispose(); cancelAnimationFrame(rafId); abort.abort(); resize.disconnect(); contentResize.disconnect(); visibility.disconnect();
+      delete container.dataset.haInitialized;
+    }
+    window.addEventListener("pagehide", dispose, { once: true, signal: abort.signal });
+    document.addEventListener("astro:before-swap", dispose, { once: true, signal: abort.signal });
+    render(lastTime);
+    requestFrame();
+  }
+
+  // `astro:page-load` fires on the initial load and on every client-side
+  // transition navigation — DOMContentLoaded only fires once, so re-entering
+  // this page via the ClientRouter (e.g. journal -> beranda) never re-ran
+  // init() and left the hero canvas empty.
+  document.addEventListener("astro:page-load", init);
+</script>

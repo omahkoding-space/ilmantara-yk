@@ -1,0 +1,48 @@
+---
+// Figma-style frame: a canvas frame-name label above a chrome panel with a
+// tab header. Mirrors the `CHROME` panel from Hero.astro so service pages
+// read as a Figma canvas instead of flat rounded cards.
+interface Props {
+  /** Frame name shown on the label row (# name). */
+  frame: string;
+  /** Right-aligned meta on the label row, e.g. "4 layers". */
+  meta?: string;
+  /** Tab labels in the panel header. */
+  tabs?: string[];
+  /** Index of the active tab. */
+  active?: number;
+  /** Optional icon shown before the frame name (# by default). */
+  icon?: string;
+  class?: string;
+}
+
+const {
+  frame,
+  tabs = [],
+  active = 0,
+  icon = "#",
+  class: className = "",
+} = Astro.props;
+
+const CHROME =
+  "overflow-hidden rounded-xl border border-ink/10 bg-white/[.82] backdrop-blur-[14px] backdrop-saturate-[1.4] shadow-[inset_0_1px_0_rgba(255,255,255,.8),0_18px_40px_-18px_rgba(12,12,14,.28),0_2px_6px_rgba(12,12,14,.05)]";
+---
+
+<section class:list={["relative", className]}>
+  <div class="mb-3 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+    <span class="text-accent" aria-hidden="true">{icon}</span>
+    <span class="text-ink/70">{frame}</span>
+  </div>
+  <div class={CHROME}>
+    {
+      tabs.length > 0 && (
+        <div class="flex items-center gap-3.5 border-b border-ink/10 px-4 py-3 text-[12px] font-semibold leading-none">
+          {tabs.map((t, i) => (
+            <span class={i === active ? "text-ink" : "font-medium text-ink/65"}>{t}</span>
+          ))}
+        </div>
+      )
+    }
+    <slot />
+  </div>
+</section>

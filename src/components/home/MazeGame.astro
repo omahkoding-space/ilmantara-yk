@@ -1,0 +1,853 @@
+---
+/**
+ * MazeGame — native flowchart-driven maze puzzle (no iframe, no 3rd-party
+ * block editor). Three frames, left to right:
+ *   #canvas    — the maze board (original Blockly-games map art + pegman).
+ *   #flowchart — a compact toolbox of draggable flowchart node stencils.
+ *   #workspace — a scrollable graph canvas where nodes are wired
+ *                into an executable program.
+ *
+ * The graph is executed by src/components/home/maze/flowchart.ts, a pure
+ * generator-based engine with no DOM dependency — this file only drives
+ * the generator and animates its events onto the board.
+ *
+ * Maze assets kept from the previous implementation:
+ * - maps: src/components/home/maze/maps/level-1..10.svg — the exact
+ *   `svgMaze` snapshots from the original blockly maze page.
+ * - public/blockly-games/en/maze/ keeps only what native still loads:
+ *   tiles_pegman.png, marker.png, pegman.png, win.mp3, fail_pegman.mp3.
+ * - levels: src/components/home/maze/levels.ts — the original map grids
+ *   and per-level toolbox progression.
+ * - pegman motion: the original Z() math (x = 50a-49d+1, frames 4T/16/18).
+ * - sounds: the original win.mp3 / fail_pegman.mp3.
+ */
+import GlyphIcon from "../GlyphIcon.astro";
+---
+
+<div data-maze-game class="grid gap-6 lg:grid-cols-[1.05fr_auto_1.3fr]">
+  <!-- Frame 1: Maze Canvas -->
+  <div class="min-w-0">
+    <p class="mb-2 font-mono text-[11px] text-ink/65">#canvas</p>
+    <div data-frame="canvas" class="relative flex flex-col rounded-none border border-ink/10 bg-white/70 p-4 backdrop-blur-sm md:p-5">
+      <!-- Figma-style selection frame: square blue border + square handles (decorative) -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0" style="border: 1.5px solid rgb(var(--color-accent-rgb));">
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 0%; top: 0%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 50%; top: 0%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 100%; top: 0%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 100%; top: 50%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 100%; top: 100%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 50%; top: 100%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 0%; top: 100%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+        <span class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white" style="left: 0%; top: 50%; border: 1.5px solid rgb(var(--color-accent-rgb));"></span>
+      </div>
+      <!-- Board toolbar: level selector, run -->
+      <div class="relative flex flex-wrap items-center gap-2">
+        <div data-level-row role="group" aria-label="Pilih level" class="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto py-0.5"></div>
+        <button type="button" data-run class="ml-auto flex items-center gap-1.5 rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white transition-transform hover:scale-[1.03] active:scale-95 disabled:opacity-50">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg>
+          Jalankan
+        </button>
+      </div>
+
+      <!-- Board: original level SVG injected here, transparent bg -->
+      <div class="relative mt-4 flex min-h-[320px] items-center justify-center overflow-hidden rounded-none border border-ink/10 bg-white/60 p-4">
+        <div data-board class="w-full max-w-[420px] [&>svg]:block [&>svg]:h-auto [&>svg]:w-full"></div>
+        <!-- Floating block-limit indicator, only shown when the level caps node count (original maxBlocks) -->
+        <span data-blocks-left class="pointer-events-none absolute bottom-3 left-3 hidden items-center gap-1.5 rounded-full border border-ink/10 bg-white px-2.5 py-1 font-mono text-[11px] text-ink/70 shadow-sm"></span>
+      </div>
+      <div class="relative mt-2">
+        <p data-status class="font-mono text-xs text-ink/65">Memuat maze…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frame 2: Flowchart Toolbox -->
+  <div class="min-w-0">
+    <p class="mb-2 font-mono text-[11px] text-ink/65">#node</p>
+    <div data-frame="toolbox" class="flex flex-col rounded-none border border-ink/10 p-3">
+      <div data-toolbox class="flex flex-col items-center gap-2.5"></div>
+    </div>
+  </div>
+
+  <!-- Frame 3: Flowchart Workspace -->
+  <div class="min-w-0">
+    <p class="mb-2 font-mono text-[11px] text-ink/65">#flowchart</p>
+    <div data-frame="workspace" class="flex flex-col rounded-none border border-ink/10">
+      <div class="flex items-center justify-between gap-2 border-b border-ink/10 px-3 py-2">
+        <p class="text-xs text-ink/65">Tarik node ke sini, tarik port untuk menyambung</p>
+        <button type="button" data-clear class="text-xs font-medium text-ink/65 underline hover:text-ink">Bersihkan</button>
+      </div>
+      <div data-flow-wrap class="relative min-h-0 flex-1 overflow-auto overscroll-contain bg-[radial-gradient(circle_at_1px_1px,rgb(var(--color-ink-rgb)/.14)_1px,transparent_1.2px)] bg-[size:20px_20px]">
+        <div data-flow-canvas class="relative">
+          <svg data-flow-edges class="absolute inset-0 h-full w-full overflow-visible">
+            <defs>
+              <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="rgba(12,12,14,.45)" />
+              </marker>
+            </defs>
+          </svg>
+          <div data-flow-nodes class="absolute inset-0"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win modal -->
+  <div data-win class="fixed inset-0 z-[9990] hidden items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+      <p class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+      </p>
+      <h3 class="mt-3 text-xl font-bold text-ink">Selamat!</h3>
+      <p data-win-text class="mt-1 text-sm text-ink/60"></p>
+      <div class="mt-5 flex gap-2">
+        <button type="button" data-replay class="flex-1 rounded-full border border-ink/15 px-4 py-2 text-sm font-medium text-ink hover:border-ink/40">Ulangi</button>
+        <button type="button" data-next class="flex-1 rounded-full bg-accent px-4 py-2 text-sm font-medium text-white hover:opacity-90">Level berikutnya <GlyphIcon name="right" class="text-white" /></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sensor / direction popup menu (for "if" nodes) -->
+  <div data-sensor-menu class="fixed z-[9995] hidden min-w-[132px] rounded-xl border border-ink/10 bg-white p-1 shadow-[0_18px_40px_-16px_rgba(12,12,14,0.35)]"></div>
+</div>
+
+<script type="module">
+  import { LEVELS, NODE_FILL, START_DIR } from "./maze/levels";
+  import { runFlow, createWorld } from "./maze/flowchart";
+  // Level 1 is the default board, so bundle its map with the script instead of
+  // fetching it as a separate chunk during page load (it was the deepest link
+  // in the network dependency tree). Levels 2–10 stay lazy.
+  import level1Raw from "./maze/maps/level-1.svg?raw";
+
+  // Toolbox stencils always offered, per-level filtered by LEVELS[i].toolbox
+  // (start/end are singleton anchors, never level-gated).
+  const TOOLBOX_ORDER = ["start", "move", "turnLeft", "turnRight", "if", "repeat", "end"];
+  const LABEL = {
+    start: "Mulai",
+    end: "Selesai",
+    move: "Maju",
+    turnLeft: "Belok kiri",
+    turnRight: "Belok kanan",
+    if: "Jika ada jalan?",
+    repeat: "Perulangan",
+  };
+  const SHAPE = { start: "pill", end: "pill", move: "rect", turnLeft: "rect", turnRight: "rect", if: "diamond", repeat: "hex" };
+  // Full size for nodes placed in the workspace graph.
+  const DIM = {
+    start: { w: 116, h: 40 },
+    end: { w: 116, h: 40 },
+    move: { w: 150, h: 40 },
+    turnLeft: { w: 150, h: 40 },
+    turnRight: { w: 150, h: 40 },
+    if: { w: 150, h: 96 },
+    repeat: { w: 150, h: 54 },
+  };
+  // Narrower stencils for the toolbox column, so it can stay slim and leave
+  // more room for the workspace.
+  const TOOLBOX_DIM = {
+    start: { w: 92, h: 36 },
+    end: { w: 92, h: 36 },
+    move: { w: 118, h: 36 },
+    turnLeft: { w: 118, h: 36 },
+    turnRight: { w: 118, h: 36 },
+    if: { w: 118, h: 76 },
+    repeat: { w: 112, h: 42 },
+  };
+
+  function initGame(root) {
+    const $ = (sel) => root.querySelector(sel);
+    const boardEl = $("[data-board]");
+    const statusEl = $("[data-status]");
+    const blocksLeftEl = $("[data-blocks-left]");
+    const levelRow = $("[data-level-row]");
+    const runBtn = $("[data-run]");
+    const winEl = $("[data-win]");
+    const sensorMenu = $("[data-sensor-menu]");
+    const toolboxEl = $("[data-toolbox]");
+    const flowWrap = $("[data-flow-wrap]");
+    const flowCanvas = $("[data-flow-canvas]");
+    const flowNodesEl = $("[data-flow-nodes]");
+    const flowEdgesSvg = $("[data-flow-edges]");
+    const canvasFrameEl = $('[data-frame="canvas"]');
+    const toolboxFrameEl = $('[data-frame="toolbox"]');
+    const workspaceFrameEl = $('[data-frame="workspace"]');
+
+    const mapFiles = import.meta.glob(["./maze/maps/level-*.svg", "!./maze/maps/level-1.svg"], { query: "?raw", import: "default" });
+
+    let uid = 0;
+    let levelIdx = 0;
+    let unlocked = 1;
+    try {
+      unlocked = Math.max(1, Math.min(LEVELS.length, parseInt(localStorage.getItem("maze-unlocked") || "1", 10) || 1));
+    } catch { /* private mode */ }
+    let start = null, goal = null;
+    let pos = null, dir = START_DIR, running = false;
+    let peg = null, clip = null;
+
+    let flowNodes = [];
+    let flowEdges = [];
+    let selectedEdgeId = null;
+
+    const frameOf = (t) => ((Math.round(4 * t) % 16) + 16) % 16;
+    const sfx = (name) => { try { new Audio(`/blockly-games/en/maze/${name}.mp3`).play(); } catch { /* ignore */ } };
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    /* ---------- original map svg (transparent bg, original tile size) ---------- */
+    async function loadMapSvg(n) {
+      const raw = n === 1 ? level1Raw : await mapFiles[`./maze/maps/level-${n}.svg`]();
+      boardEl.innerHTML = raw;
+      boardEl.querySelectorAll("image").forEach((img) => {
+        const xl = img.getAttributeNS("http://www.w3.org/1999/xlink", "href") || img.getAttribute("xlink:href");
+        if (xl && !img.getAttribute("href")) img.setAttribute("href", xl);
+      });
+      peg = boardEl.querySelector('[id$="-pegman"]');
+      clip = boardEl.querySelector('[id$="-clipRect"]');
+      boardEl.querySelectorAll('rect[fill="#F1EEE7"]').forEach((r) => {
+        r.setAttribute("fill", "transparent");
+        r.setAttribute("stroke", "transparent");
+      });
+    }
+
+    // Original Z() from compressed.js.
+    function placePeg(a, c, d) {
+      if (!peg) return;
+      peg.setAttribute("x", String(50 * a - 49 * d + 1));
+      const y = 50 * (c + 0.5) - 26 - 8;
+      peg.setAttribute("y", String(y));
+      peg.setAttribute("transform", "rotate(0, 0, 0)");
+      clip.setAttribute("x", String(50 * a + 1));
+      clip.setAttribute("y", String(y));
+    }
+
+    /* ======================= flowchart node/edge model ======================= */
+
+    // The workspace canvas is larger than its visible box (see
+    // syncCanvasSize) so it can be scrolled, but only up to this fixed
+    // margin on each side — that bounds the max scroll distance.
+    const WORKSPACE_SCROLL_MARGIN = 180;
+
+    // Sizes the scrollable flow canvas to the visible box plus a fixed
+    // margin on every side, so there's always some room to scroll/pan
+    // around placed nodes, but never an unbounded amount.
+    function syncCanvasSize() {
+      const wrapW = flowWrap.clientWidth || 460;
+      const wrapH = flowWrap.clientHeight || 500;
+      flowCanvas.style.width = wrapW + WORKSPACE_SCROLL_MARGIN * 2 + "px";
+      flowCanvas.style.height = wrapH + WORKSPACE_SCROLL_MARGIN * 2 + "px";
+    }
+
+    // Scrolls the workspace so the visible box sits over the center of the
+    // canvas — where seedFlow places Start/End — on every breakpoint.
+    function centerWorkspaceScroll() {
+      flowWrap.scrollLeft = Math.max(0, (flowCanvas.offsetWidth - flowWrap.clientWidth) / 2);
+      flowWrap.scrollTop = Math.max(0, (flowCanvas.offsetHeight - flowWrap.clientHeight) / 2);
+    }
+
+    function seedFlow() {
+      syncCanvasSize();
+      // Start/End land inside the box that's visible without scrolling
+      // (the canvas's centered portion, see centerWorkspaceScroll), and
+      // centered horizontally in it, instead of pinned to a corner.
+      const viewW = flowWrap.clientWidth || 460;
+      const viewH = flowWrap.clientHeight || 500;
+      const marginX = (flowCanvas.offsetWidth - viewW) / 2;
+      const marginY = (flowCanvas.offsetHeight - viewH) / 2;
+      const startX = Math.max(8, Math.round(marginX + (viewW - DIM.start.w) / 2));
+      const endX = Math.max(8, Math.round(marginX + (viewW - DIM.end.w) / 2));
+      const startY = Math.round(marginY + 16);
+      const endY = Math.max(startY + DIM.start.h + 60, Math.round(marginY + viewH - DIM.end.h - 16));
+      flowNodes = [
+        { id: ++uid, type: "start", x: startX, y: startY },
+        { id: ++uid, type: "end", x: endX, y: endY },
+      ];
+      flowEdges = [];
+      selectedEdgeId = null;
+    }
+
+    function findNode(id) { return flowNodes.find((n) => n.id === id); }
+    function removeNode(id) {
+      flowNodes = flowNodes.filter((n) => n.id !== id);
+      flowEdges = flowEdges.filter((e) => e.source !== id && e.target !== id);
+    }
+    function outHandles(type) {
+      if (type === "if") return [{ h: "yes", label: "Ya" }, { h: "no", label: "Tidak" }];
+      if (type === "repeat") return [{ h: "loop", label: "Ulang" }, { h: "done", label: "Selesai" }];
+      if (type === "end") return [];
+      return [{ h: "out", label: "" }];
+    }
+    function hasInput(type) { return type !== "start"; }
+
+    // Port position in unscaled content px, relative to node top-left.
+    function portPos(node, handle) {
+      const { w, h } = DIM[node.type];
+      if (handle === "in") return { x: w / 2, y: 0 };
+      if (node.type === "if") return handle === "yes" ? { x: 0, y: h / 2 } : { x: w, y: h / 2 };
+      if (node.type === "repeat") return handle === "loop" ? { x: w / 2, y: h } : { x: w, y: h / 2 };
+      return { x: w / 2, y: h };
+    }
+
+    function renderToolbox() {
+      toolboxEl.innerHTML = "";
+      const allowed = new Set(["start", "end", ...LEVELS[levelIdx].toolbox]);
+      TOOLBOX_ORDER.filter((t) => allowed.has(t)).forEach((type) => {
+        const stencil = document.createElement("div");
+        stencil.draggable = true;
+        stencil.dataset.stencilType = type;
+        stencil.className = "cursor-grab active:cursor-grabbing";
+        const stencilNode = type === "if" ? { type, sensorDir: LEVELS[levelIdx].ifDefault } : { type };
+        stencil.appendChild(nodeShapeEl(stencilNode, { compact: true }));
+        stencil.addEventListener("dragstart", (e) => {
+          e.dataTransfer.effectAllowed = "copy";
+          try { e.dataTransfer.setData("text/plain", type); } catch { /* Safari */ }
+          e.dataTransfer.setData("application/x-flow-type", type);
+          // Browsers paint an opaque backdrop behind the auto-generated drag
+          // image; setting one explicitly uses the stencil's own (clipped,
+          // transparent-cornered) rendering instead, so diamond/hex shapes
+          // don't drag around with a visible white box behind them.
+          e.dataTransfer.setDragImage(stencil, stencil.offsetWidth / 2, stencil.offsetHeight / 2);
+        });
+        toolboxEl.appendChild(stencil);
+      });
+    }
+
+    // Chooses a black/white label so node text keeps a WCAG-safe contrast
+    // against its fill colour (white only works on the dark accent blue).
+    function contrastText(hex) {
+      const c = hex.replace("#", "");
+      const chan = (s) => {
+        const v = parseInt(s, 16) / 255;
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      };
+      const L = 0.2126 * chan(c.slice(0, 2)) + 0.7152 * chan(c.slice(2, 4)) + 0.0722 * chan(c.slice(4, 6));
+      const white = 1.05 / (L + 0.05);
+      const ink = (L + 0.05) / (0.003685 + 0.05);
+      return ink >= white ? "#0C0C0E" : "#FFFFFF";
+    }
+
+    // Builds the shaped node visual (shared by toolbox stencils and placed nodes).
+    function nodeShapeEl(node, opts = {}) {
+      const { w, h } = (opts.compact ? TOOLBOX_DIM : DIM)[node.type];
+      const shape = SHAPE[node.type];
+      const fill = NODE_FILL[node.type];
+      const el = document.createElement("div");
+      el.style.width = w + "px";
+      el.style.height = h + "px";
+      el.style.color = contrastText(fill);
+      el.className = "relative flex select-none items-center justify-center text-center font-bold uppercase tracking-wide " + (opts.compact ? "text-[9.5px]" : "text-[11px]");
+      if (shape === "pill" || shape === "rect") {
+        el.style.background = fill;
+        el.style.borderRadius = shape === "pill" ? "999px" : "8px";
+      } else {
+        // Diamond/hex are painted as real SVG geometry, not a clipped div:
+        // CSS clip-path can flash its full rectangular box behind the cut
+        // corners while the browser is compositing it (dragging, dropping),
+        // which showed up as a visible white backdrop. An SVG shape has no
+        // bounding box to leak — only the filled polygon ever paints.
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        svg.setAttribute("preserveAspectRatio", "none");
+        svg.classList.add("absolute", "inset-0", "h-full", "w-full");
+        const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        poly.setAttribute("points", shape === "diamond"
+          ? `${w / 2},0 ${w},${h / 2} ${w / 2},${h} 0,${h / 2}`
+          : `${w * 0.16},0 ${w * 0.84},0 ${w},${h / 2} ${w * 0.84},${h} ${w * 0.16},${h} 0,${h / 2}`);
+        poly.setAttribute("fill", fill);
+        svg.appendChild(poly);
+        el.appendChild(svg);
+      }
+
+      const label = document.createElement("span");
+      label.className = "relative pointer-events-none leading-tight " + (opts.compact ? "px-1.5" : "px-3");
+      label.textContent = node.type === "if" && node.sensorDir && node.sensorDir !== "ahead"
+        ? `Path ${node.sensorDir}?`
+        : LABEL[node.type];
+      el.appendChild(label);
+
+      if (!opts.compact) {
+        if (hasInput(node.type)) el.appendChild(portEl(node, "in", "input"));
+        outHandles(node.type).forEach(({ h: handle, label: hl }) => {
+          el.appendChild(portEl(node, handle, "output", hl));
+        });
+      }
+      return el;
+    }
+
+    function portEl(node, handle, role, hintLabel) {
+      const p = portPos(node, handle === "in" ? "in" : handle);
+      const dot = document.createElement("div");
+      dot.dataset.port = "1";
+      dot.dataset.nodeId = String(node.id);
+      dot.dataset.handle = handle;
+      dot.dataset.role = role;
+      dot.className = "absolute z-10 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow " +
+        (role === "input" ? "bg-ink/70 cursor-crosshair" : "bg-ink cursor-crosshair hover:scale-125");
+      dot.style.left = p.x + "px";
+      dot.style.top = p.y + "px";
+      if (hintLabel) {
+        dot.title = hintLabel;
+        const tag = document.createElement("span");
+        tag.className = "pointer-events-none absolute whitespace-nowrap rounded bg-ink/80 px-1 py-0.5 text-[9px] font-semibold text-white";
+        tag.textContent = hintLabel;
+        tag.style.left = (handle === "yes" ? "-6px" : handle === "no" ? "calc(100% + 6px)" : "50%") ;
+        tag.style.top = handle === "done" ? "-6px" : "calc(100% + 4px)";
+        tag.style.transform = handle === "yes" ? "translateX(-100%)" : handle === "no" ? "none" : "translateX(-50%)";
+        dot.appendChild(tag);
+      }
+      return dot;
+    }
+
+    function renderFlowNodes() {
+      flowNodesEl.innerHTML = "";
+      flowNodes.forEach((node) => {
+        const wrap = document.createElement("div");
+        wrap.dataset.flowNodeId = String(node.id);
+        wrap.className = "group absolute";
+        wrap.style.left = node.x + "px";
+        wrap.style.top = node.y + "px";
+        wrap.style.touchAction = "none";
+        wrap.appendChild(nodeShapeEl(node));
+
+        const del = document.createElement("button");
+        del.type = "button";
+        del.dataset.nodeDel = "1";
+        del.setAttribute("aria-label", "Hapus node");
+        del.className = "absolute -right-1.5 -top-1.5 z-20 hidden h-5 w-5 items-center justify-center rounded-full bg-ink text-[11px] leading-none text-white group-hover:flex";
+        del.textContent = "×";
+        wrap.appendChild(del);
+
+        flowNodesEl.appendChild(wrap);
+      });
+    }
+
+    function edgePath(n1, h1, n2) {
+      const p1 = node_abs(n1, h1);
+      const p2 = node_abs(n2, "in");
+      const dy = Math.max(40, Math.abs(p2.y - p1.y) / 2);
+      return `M ${p1.x} ${p1.y} C ${p1.x} ${p1.y + dy}, ${p2.x} ${p2.y - dy}, ${p2.x} ${p2.y}`;
+    }
+    function node_abs(node, handle) {
+      const p = portPos(node, handle);
+      return { x: node.x + p.x, y: node.y + p.y };
+    }
+
+    function renderFlowEdges() {
+      const paths = flowEdges.map((e) => {
+        const src = findNode(e.source), tgt = findNode(e.target);
+        if (!src || !tgt) return "";
+        const d = edgePath(src, e.sourceHandle, tgt);
+        const selected = e.id === selectedEdgeId;
+        return `<path data-edge-id="${e.id}" d="${d}" fill="none" stroke="${selected ? "#4B3BFF" : "rgba(12,12,14,.4)"}" stroke-width="${selected ? 2.5 : 1.75}" marker-end="url(#flow-arrow)" style="cursor:pointer" />` +
+          `<path d="${d}" fill="none" stroke="transparent" stroke-width="14" data-edge-hit="${e.id}" style="cursor:pointer" />`;
+      }).join("");
+      flowEdgesSvg.innerHTML = `<defs><marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="rgba(12,12,14,.45)" /></marker></defs>${paths}`;
+    }
+
+    // Placed logic nodes, matching the original game's countable blocks (Start/End anchors don't count).
+    function placedBlockCount() {
+      return flowNodes.filter((n) => n.type !== "start" && n.type !== "end").length;
+    }
+
+    function renderFlow() {
+      renderFlowNodes();
+      renderFlowEdges();
+      const max = LEVELS[levelIdx].maxBlocks;
+      if (!Number.isFinite(max)) {
+        blocksLeftEl.classList.add("hidden");
+        blocksLeftEl.classList.remove("flex");
+        return;
+      }
+      const remaining = Math.max(0, max - placedBlockCount());
+      blocksLeftEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15" /><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /><path d="m3.3 7 8.7 5 8.7-5" /><path d="M12 22V12" /></svg>` +
+        `Sisa ${remaining} blok.`;
+      blocksLeftEl.classList.remove("hidden");
+      blocksLeftEl.classList.add("flex");
+    }
+
+    /* ---------- drag new node from toolbox into workspace ---------- */
+    function canvasPoint(clientX, clientY) {
+      const r = flowCanvas.getBoundingClientRect();
+      return { x: clientX - r.left, y: clientY - r.top };
+    }
+    // Keep every node inside the (now scrollable, but fixed-size) canvas
+    // box so nothing drags out of reach.
+    function clampPos(x, y, w, h) {
+      const r = flowCanvas.getBoundingClientRect();
+      return {
+        x: Math.min(Math.max(0, x), Math.max(0, r.width - w)),
+        y: Math.min(Math.max(0, y), Math.max(0, r.height - h)),
+      };
+    }
+    flowWrap.addEventListener("dragover", (e) => { if (running) return; e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+    flowWrap.addEventListener("drop", (e) => {
+      if (running) return;
+      const type = e.dataTransfer.getData("application/x-flow-type") || e.dataTransfer.getData("text/plain");
+      if (!type || !LABEL[type]) return;
+      e.preventDefault();
+      if (placedBlockCount() >= LEVELS[levelIdx].maxBlocks) {
+        setStatus(`Batas blok tercapai — level ini maksimal ${LEVELS[levelIdx].maxBlocks}.`);
+        return;
+      }
+      const pt = canvasPoint(e.clientX, e.clientY);
+      const { w, h } = DIM[type];
+      const pos = clampPos(pt.x - w / 2, pt.y - h / 2, w, h);
+      const node = { id: ++uid, type, x: pos.x, y: pos.y };
+      if (type === "if") node.sensorDir = LEVELS[levelIdx].ifDefault;
+      flowNodes.push(node);
+      renderFlow();
+    });
+
+    /* ---------- drag existing node to reposition ---------- */
+    let nodeDrag = null;
+    flowNodesEl.addEventListener("pointerdown", (e) => {
+      if (running) return;
+      if (e.target.closest("[data-port]") || e.target.closest("[data-node-del]")) return;
+      const wrap = e.target.closest("[data-flow-node-id]");
+      if (!wrap) return;
+      const node = findNode(Number(wrap.dataset.flowNodeId));
+      if (!node) return;
+      nodeDrag = { node, startX: e.clientX, startY: e.clientY, origX: node.x, origY: node.y };
+      wrap.setPointerCapture(e.pointerId);
+    });
+    flowNodesEl.addEventListener("pointermove", (e) => {
+      if (!nodeDrag) return;
+      const { w, h } = DIM[nodeDrag.node.type];
+      const pos = clampPos(nodeDrag.origX + (e.clientX - nodeDrag.startX), nodeDrag.origY + (e.clientY - nodeDrag.startY), w, h);
+      nodeDrag.node.x = pos.x;
+      nodeDrag.node.y = pos.y;
+      renderFlow();
+    });
+    function endNodeDrag() { nodeDrag = null; }
+    flowNodesEl.addEventListener("pointerup", endNodeDrag);
+    flowNodesEl.addEventListener("pointercancel", endNodeDrag);
+
+    flowNodesEl.addEventListener("click", (e) => {
+      const del = e.target.closest("[data-node-del]");
+      if (del && !running) {
+        const wrap = del.closest("[data-flow-node-id]");
+        removeNode(Number(wrap.dataset.flowNodeId));
+        renderFlow();
+        return;
+      }
+      const label = e.target.closest("span");
+      const wrap = e.target.closest("[data-flow-node-id]");
+      if (wrap && label) {
+        const node = findNode(Number(wrap.dataset.flowNodeId));
+        if (node && node.type === "if" && !running) openSensorMenu(node, label);
+      }
+    });
+
+    /* ---------- drag a port to connect two nodes ---------- */
+    let edgeDrag = null;
+    const tempPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    tempPath.setAttribute("fill", "none");
+    tempPath.setAttribute("stroke", "rgb(var(--color-accent-rgb))");
+    tempPath.setAttribute("stroke-width", "2");
+    tempPath.setAttribute("stroke-dasharray", "5,4");
+
+    flowNodesEl.addEventListener("pointerdown", (e) => {
+      const port = e.target.closest("[data-port]");
+      if (!port || running) return;
+      if (port.dataset.role !== "output") return;
+      e.stopPropagation();
+      const node = findNode(Number(port.dataset.nodeId));
+      edgeDrag = { sourceId: node.id, handle: port.dataset.handle };
+      flowEdgesSvg.appendChild(tempPath);
+      document.addEventListener("pointermove", onEdgeDragMove);
+      document.addEventListener("pointerup", onEdgeDragEnd, { once: true });
+    });
+    function onEdgeDragMove(e) {
+      if (!edgeDrag) return;
+      const src = findNode(edgeDrag.sourceId);
+      const p1 = node_abs(src, edgeDrag.handle);
+      const pt = canvasPoint(e.clientX, e.clientY);
+      const dy = Math.max(40, Math.abs(pt.y - p1.y) / 2);
+      tempPath.setAttribute("d", `M ${p1.x} ${p1.y} C ${p1.x} ${p1.y + dy}, ${pt.x} ${pt.y - dy}, ${pt.x} ${pt.y}`);
+    }
+    function onEdgeDragEnd(e) {
+      document.removeEventListener("pointermove", onEdgeDragMove);
+      tempPath.remove();
+      if (!edgeDrag) return;
+      const under = document.elementFromPoint(e.clientX, e.clientY);
+      const port = under && under.closest && under.closest('[data-port][data-role="input"]');
+      if (port) {
+        const targetId = Number(port.dataset.nodeId);
+        if (targetId !== edgeDrag.sourceId) {
+          flowEdges = flowEdges.filter((ed) => !(ed.source === edgeDrag.sourceId && ed.sourceHandle === edgeDrag.handle));
+          flowEdges.push({ id: ++uid, source: edgeDrag.sourceId, sourceHandle: edgeDrag.handle, target: targetId });
+        }
+      }
+      edgeDrag = null;
+      renderFlow();
+    }
+
+    /* ---------- select / delete edges ---------- */
+    flowEdgesSvg.addEventListener("click", (e) => {
+      const hit = e.target.closest("[data-edge-hit]");
+      selectedEdgeId = hit ? Number(hit.dataset.edgeHit) : null;
+      renderFlowEdges();
+    });
+    document.addEventListener("keydown", (e) => {
+      if ((e.key === "Delete" || e.key === "Backspace") && selectedEdgeId != null && !running) {
+        const active = document.activeElement;
+        if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+        flowEdges = flowEdges.filter((ed) => ed.id !== selectedEdgeId);
+        selectedEdgeId = null;
+        renderFlowEdges();
+      }
+    });
+
+    $("[data-clear]").addEventListener("click", () => {
+      if (running) return;
+      winEl.classList.add("hidden");
+      winEl.classList.remove("flex");
+      resetRun();
+      seedFlow();
+      renderFlow();
+      centerWorkspaceScroll();
+      setStatus("Dibersihkan. Kembali ke awal — susun flowchart lalu tekan Jalankan.");
+    });
+
+    /* ---------- "if" direction popup (reused for toolbox too) ---------- */
+    function openSensorMenu(node, anchor) {
+      sensorMenu.innerHTML = "";
+      [{ v: "ahead", label: "depan" }, { v: "left", label: "kiri ↺" }, { v: "right", label: "kanan ↻" }].forEach((o) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "block w-full rounded-lg px-2.5 py-1.5 text-left text-sm text-ink hover:bg-accent hover:text-white";
+        btn.textContent = o.label;
+        btn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          node.sensorDir = o.v;
+          sensorMenu.classList.add("hidden");
+          renderFlow();
+        });
+        sensorMenu.appendChild(btn);
+      });
+      const r = anchor.getBoundingClientRect();
+      sensorMenu.classList.remove("hidden");
+      sensorMenu.style.left = Math.min(window.innerWidth - 150, r.left) + "px";
+      sensorMenu.style.top = r.bottom + 6 + "px";
+    }
+    document.addEventListener("click", (e) => {
+      if (!sensorMenu.classList.contains("hidden") && !sensorMenu.contains(e.target) && !e.target.closest(".group span")) sensorMenu.classList.add("hidden");
+    });
+
+    /* ======================= level load / engine wiring ======================= */
+
+    async function loadLevel(i) {
+      levelIdx = i;
+      const lv = LEVELS[i];
+      lv.grid.forEach((row, y) => row.forEach((v, x) => {
+        if (v === 2) start = { x, y };
+        if (v === 3) goal = { x, y };
+      }));
+      running = false;
+      runBtn.disabled = false;
+      await loadMapSvg(i + 1);
+      resetRun();
+      renderToolbox();
+      syncFrameHeights();
+      seedFlow();
+      renderFlow();
+      centerWorkspaceScroll();
+      renderLevelMenu();
+      setStatus(`Level ${i + 1} dari ${LEVELS.length}. Susun flowchart, lalu tekan Jalankan.`);
+    }
+
+    // The maze board (not the toolbox's node stack, which is shorter) is the
+    // real height driver: #flowchart and #workspace just match whatever
+    // height #canvas naturally settles on.
+    // Matches #flowchart and #workspace to the maze canvas's own height —
+    // stacked (mobile/tablet) or side by side (desktop). The workspace's own
+    // flow canvas (see syncCanvasSize) is sized relative to its visible box
+    // and may be scrolled within it, up to a fixed margin.
+    function syncFrameHeights() {
+      const h = Math.round(canvasFrameEl.getBoundingClientRect().height);
+      if (!h) return;
+      toolboxFrameEl.style.height = h + "px";
+      workspaceFrameEl.style.height = h + "px";
+    }
+
+    function renderLevelMenu() {
+      levelRow.innerHTML = "";
+      LEVELS.forEach((_, i) => {
+        const locked = i >= unlocked;
+        const active = i === levelIdx;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.disabled = locked;
+        btn.setAttribute("aria-label", locked ? `Level ${i + 1} (locked)` : `Level ${i + 1}`);
+        btn.title = locked ? `Level ${i + 1} (locked)` : `Level ${i + 1}`;
+        btn.className = "flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full px-1.5 text-xs font-semibold transition-colors " +
+          (active ? "bg-accent text-white" : locked ? "cursor-not-allowed text-ink/30" : "text-ink hover:bg-ink/5");
+        btn.textContent = locked ? "🔒" : String(i + 1);
+        if (!locked && !active) btn.addEventListener("click", () => loadLevel(i));
+        levelRow.appendChild(btn);
+      });
+    }
+
+    function setActive(id) {
+      flowNodesEl.querySelectorAll("[data-flow-node-id]").forEach((el) => {
+        const on = Number(el.dataset.flowNodeId) === id;
+        el.classList.toggle("outline", on);
+        el.classList.toggle("outline-2", on);
+        el.classList.toggle("outline-offset-2", on);
+        el.classList.toggle("outline-accent", on);
+      });
+    }
+
+    function fail(msg) {
+      running = false;
+      runBtn.disabled = false;
+      sfx("fail_pegman");
+      setStatus(msg + " Tekan Jalankan untuk coba lagi.");
+      boardEl.animate(
+        [{ transform: "translateX(0)" }, { transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "translateX(0)" }],
+        { duration: 300 }
+      );
+    }
+
+    async function run() {
+      if (running) return;
+      pos = { ...start };
+      dir = START_DIR;
+      placePeg(pos.x, pos.y, frameOf(dir));
+      running = true;
+      runBtn.disabled = true;
+      setStatus("Berjalan…");
+
+      const world = createWorld(LEVELS[levelIdx].grid, start, goal, START_DIR);
+      const gen = runFlow(flowNodes, flowEdges, world);
+      let moves = 0;
+      let result = null;
+
+      for (const ev of gen) {
+        if (!running) break;
+        if (ev.type === "init") continue;
+        if ("nodeId" in ev) { setActive(ev.nodeId); await sleep(ev.type === "branch" ? 220 : 60); }
+        if (ev.type === "move") {
+          const d = DIRS[((dir % 4) + 4) % 4];
+          for (let s = 1; s <= 4; s++) {
+            placePeg(pos.x + (d[0] * s) / 4, pos.y + (d[1] * s) / 4, frameOf(dir));
+            await sleep(60);
+            if (!running) break;
+          }
+          pos = ev.pos;
+          moves++;
+        } else if (ev.type === "turn") {
+          dir = ev.dir;
+          placePeg(pos.x, pos.y, frameOf(dir));
+          moves++;
+          await sleep(260);
+        } else if (ev.type === "blocked") {
+          result = { kind: "blocked" };
+          break;
+        } else if (ev.type === "error") {
+          result = { kind: "error", message: ev.message };
+          break;
+        } else if (ev.type === "win") {
+          result = { kind: "win" };
+          break;
+        } else if (ev.type === "end" || ev.type === "stopped") {
+          result = { kind: ev.type };
+          break;
+        }
+      }
+
+      setActive(-1);
+      if (!running) return;
+      running = false;
+      runBtn.disabled = false;
+
+      if (result && result.kind === "win") {
+        sfx("win");
+        for (const f of [16, 18, 16, 18, 16]) { placePeg(pos.x, pos.y, f); await sleep(150); }
+        placePeg(pos.x, pos.y, frameOf(dir));
+        unlockNext();
+        const text = `Level ${levelIdx + 1} selesai dengan ${moves} langkah.` +
+          (levelIdx + 1 < LEVELS.length ? ` Siap ke level ${levelIdx + 2}?` : " Itu maze terakhir!");
+        root.querySelector("[data-win-text]").textContent = text;
+        root.querySelector("[data-next]").style.display = levelIdx + 1 < LEVELS.length ? "" : "none";
+        winEl.classList.remove("hidden");
+        winEl.classList.add("flex");
+        setStatus(`Level ${levelIdx + 1} selesai!`);
+      } else if (result && result.kind === "blocked") {
+        fail("Duh! Jalur itu buntu.");
+      } else if (result && result.kind === "error") {
+        fail(result.message);
+      } else if (result && result.kind === "stopped") {
+        fail("Belum sampai tujuan.");
+      } else if (result && result.kind === "end") {
+        fail("Sampai di Selesai tapi belum menemukan tujuan.");
+      }
+    }
+    const DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+
+    function resetRun() {
+      running = false;
+      runBtn.disabled = false;
+      if (start) {
+        pos = { ...start };
+        dir = START_DIR;
+        placePeg(pos.x, pos.y, frameOf(dir));
+      }
+      setActive(-1);
+    }
+
+    function unlockNext() {
+      if (levelIdx + 1 < LEVELS.length) {
+        unlocked = Math.max(unlocked, levelIdx + 2);
+        try { localStorage.setItem("maze-unlocked", String(unlocked)); } catch { /* ignore */ }
+        renderLevelMenu();
+      }
+    }
+
+    function setStatus(t) {
+      statusEl.textContent = t;
+    }
+
+    /* ---------- wiring ---------- */
+    runBtn.addEventListener("click", run);
+    root.querySelector("[data-replay]").addEventListener("click", () => {
+      winEl.classList.add("hidden");
+      winEl.classList.remove("flex");
+      resetRun();
+    });
+    root.querySelector("[data-next]").addEventListener("click", () => {
+      winEl.classList.add("hidden");
+      winEl.classList.remove("flex");
+      if (levelIdx + 1 < LEVELS.length) loadLevel(levelIdx + 1);
+    });
+    window.addEventListener("resize", () => {
+      syncFrameHeights();
+      syncCanvasSize();
+    });
+    loadLevel(0);
+  }
+
+  // `astro:page-load` fires on the initial load and on every client-side
+  // transition navigation — this section isn't `transition:persist`-ed, so
+  // its DOM is fresh each time, but a plain top-level call only ran once
+  // (Astro skips re-running an inline script whose content already executed
+  // this session), leaving the board stuck on "Memuat maze…" after
+  // navigating back to it (e.g. from /journal/ to /#playground).
+  // The maze sits far below the fold, so building its (fairly heavy) UI during
+  // the initial load is wasted main-thread work. Initialise it only once it
+  // scrolls near the viewport.
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll("[data-maze-game]").forEach((root) => {
+      if (root.dataset.mazeInit) return;
+      root.dataset.mazeInit = "pending";
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          obs.disconnect();
+          root.dataset.mazeInit = "done";
+          initGame(root);
+        },
+        { rootMargin: "600px 0px" }
+      );
+      io.observe(root);
+    });
+  });
+</script>

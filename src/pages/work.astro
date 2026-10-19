@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+import WorkHeader from "../components/work/WorkHeader.astro";
+import WorkCases from "../components/work/WorkCases.astro";
+import Process from "../components/home/Process.astro";
+import Testimonials from "../components/home/Testimonials.astro";
+import { WORK } from "../data/work";
+
+const projects = WORK;
+const years = projects.map((p) => p.year).filter(Boolean).sort();
+const range =
+  years.length === 0
+    ? ""
+    : years[0] === years[years.length - 1]
+      ? years[0]
+      : `${years[0]}-${years[years.length - 1]}`;
+const tags = [...new Set(projects.map((p) => p.category).filter(Boolean))].join(", ");
+const headerFacts = {
+  count: `${projects.length} studi kasus`,
+  range,
+  tags: tags || undefined,
+};
+---
+
+<Layout
+  path="/work/"
+  lang="id"
+  title="Portofolio Website & Toko Online Shopify | Ilmantara"
+  description="Portofolio Ilmantara: website bisnis dan toko online Shopify yang cepat dan fokus konversi dari software house di Yogyakarta. Lihat semua hasil kerja kami."
+  alternates={[
+    { hreflang: "id", href: "/work/" },
+    { hreflang: "x-default", href: "/work/" },
+  ]}
+>
+  <WorkHeader
+    count={headerFacts.count}
+    range={headerFacts.range}
+    tags={headerFacts.tags}
+  />
+  <WorkCases />
+  <Process index="04" active="01" />
+  <Testimonials index="05" />
+</Layout>

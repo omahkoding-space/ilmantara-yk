@@ -1,0 +1,284 @@
+---
+import GlyphIcon from "../../components/GlyphIcon.astro";
+import Layout from "../../layouts/Layout.astro";
+import FigmaPanel from "../../components/figma/FigmaPanel.astro";
+import SelectionFrame from "../../components/figma/SelectionFrame.astro";
+import ArrowLink from "../../components/ArrowLink.astro";
+import ArrowMark from "../../components/ArrowMark.astro";
+import Img from "../../components/Img.astro";
+import { WORK, getWork, relatedWork } from "../../data/work";
+import { WHATSAPP_LINK, absoluteUrl } from "../../lib/site";
+
+export function getStaticPaths() {
+  return WORK.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const related = relatedWork(project.slug);
+const path = `/work/${project.slug}/`;
+const liveHost = project.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: project.title,
+  description: project.metaDescription,
+  url: absoluteUrl(path),
+  image: absoluteUrl(project.cover),
+  dateCreated: project.year,
+  creator: { "@type": "Organization", name: "Ilmantara", url: absoluteUrl("/") },
+  about: project.category,
+  sameAs: project.url,
+};
+
+const SECTIONS = [
+  { frame: "Ikhtisar", meta: `${project.overview.length} paragraf`, body: project.overview },
+  { frame: "Tantangan", meta: `${project.challenge.length} paragraf`, body: project.challenge },
+  { frame: "Pendekatan", meta: `${project.approach.length} paragraf`, body: project.approach },
+];
+---
+
+<Layout
+  path={path}
+  lang="id"
+  title={project.seoTitle}
+  description={project.metaDescription}
+  image={project.cover}
+  ogType="article"
+  jsonLd={[projectSchema]}
+  alternates={[
+    { hreflang: "id", href: path },
+    { hreflang: "x-default", href: path },
+  ]}
+>
+  <div class="relative overflow-hidden bg-paper text-ink">
+    <!-- Figma canvas: dotted grid over the paper background -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 opacity-[.55]"
+      style="background-image: radial-gradient(circle at 1px 1px, rgba(12,12,14,0.16) 1px, transparent 1.2px); background-size: 24px 24px;"
+    >
+    </div>
+
+    <article class="relative mx-auto max-w-[1312px] px-5 pb-24 pt-[120px] sm:px-8 md:pt-[150px] lg:px-16">
+      <!-- Breadcrumb: canvas file label -->
+      <nav
+        aria-label="Breadcrumb"
+        class="flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase leading-none tracking-[0.05em] text-ink/65"
+      >
+        <span class="text-accent" aria-hidden="true">#</span>
+        <a href="/work/" class="hover:text-accent">Portofolio</a>
+        <span class="opacity-50">/</span>
+        <span class="truncate text-ink">{project.name}</span>
+      </nav>
+
+      <!-- 01 Project hero -->
+      <header class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-16">
+        <div>
+          <p class="flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none text-accent">
+            <GlyphIcon name="diamond" />
+            <span>Case Study</span>
+          </p>
+          <h1 class="mt-4 text-balance text-[clamp(40px,6vw,72px)] font-semibold leading-[0.98] tracking-[-0.04em]">
+            {project.title}
+          </h1>
+          <p class="mt-6 max-w-[720px] text-[19px] leading-[1.5] text-ink/70 md:text-[21px]">
+            {project.summary}
+          </p>
+        </div>
+
+        <!-- Meta panel: tech stack + live CTA -->
+        <FigmaPanel frame="Proyek" tabs={["Info", "Teknologi"]}>
+          <div class="p-5">
+            <dl class="space-y-3">
+              <div class="flex items-center justify-between gap-4 text-sm">
+                <dt class="text-ink/65">Kategori</dt>
+                <dd class="font-medium text-ink">{project.category}</dd>
+              </div>
+              <div class="flex items-center justify-between gap-4 text-sm">
+                <dt class="text-ink/65">Tahun</dt>
+                <dd class="font-medium text-ink">{project.year}</dd>
+              </div>
+              <div class="flex items-center justify-between gap-4 text-sm">
+                <dt class="text-ink/65">Live</dt>
+                <dd class="truncate font-medium text-ink">{liveHost}</dd>
+              </div>
+            </dl>
+
+            <ul class="mt-5 flex flex-wrap gap-1.5 border-t border-ink/10 pt-5">
+              {project.stack.map((item) => (
+                <li class="rounded-md bg-ink/[0.06] px-2.5 py-1 font-mono text-[11px] font-medium text-ink/70">
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 flex items-center justify-center gap-2 rounded-xl bg-ink px-4 py-3 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,0.55)]"
+            >
+              {"Kunjungi Proyek Live"}<ArrowMark />
+            </a>
+          </div>
+        </FigmaPanel>
+      </header>
+
+      <!-- 02 Cover: selected frame with handles + dimension chip -->
+      <figure class="relative mt-12 md:mt-16">
+        <div class="mb-2.5 flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none text-accent">
+          <GlyphIcon name="diamond" />
+          <span>Screenshot</span>
+          <span class="ml-auto text-ink/65">16 : 10</span>
+        </div>
+        <div class="relative">
+          <div class="overflow-hidden rounded-md border border-ink/10">
+            <Img src={project.cover} alt={project.coverAlt} sizes="(min-width: 1312px) 1184px, 100vw" fetchpriority="high" class="aspect-[16/10] w-full object-cover object-top" />
+          </div>
+          <SelectionFrame label="1440 × 900" />
+        </div>
+      </figure>
+
+      <!-- 03 Narrative sections -->
+      <div class="mt-16 grid grid-cols-1 gap-10 md:mt-24">
+        {
+          SECTIONS.map((section) => (
+            <FigmaPanel frame={section.frame} meta={section.meta}>
+              <div class="p-6 md:p-8">
+                <h2 class="text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[32px]">
+                  {section.frame}
+                </h2>
+                <div class="mt-5 max-w-[760px] space-y-5">
+                  {section.body.map((para) => (
+                    <p class="text-[18px] leading-[1.65] tracking-[-0.01em] text-ink/80">{para}</p>
+                  ))}
+                </div>
+              </div>
+            </FigmaPanel>
+          ))
+        }
+
+        <!-- What I built -->
+        <FigmaPanel frame="Yang Dibangun" meta={`${project.built.length} item`} tabs={["Lapisan", "Komponen"]}>
+          <div class="p-6 md:p-8">
+            <h2 class="text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[32px]">
+              Yang dibangun
+            </h2>
+            <ul class="mt-6 grid max-w-[900px] grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2">
+              {project.built.map((item, i) => (
+                <li class="flex items-start gap-3 text-[16px] leading-[1.5] text-ink/80">
+                  <span class="mt-1 font-mono text-[12px] font-medium text-accent" aria-hidden="true">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </FigmaPanel>
+
+        <!-- Technology stack -->
+        <FigmaPanel frame="Teknologi" meta={`${project.stack.length} bagian`}>
+          <div class="p-6 md:p-8">
+            <h2 class="text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[32px]">
+              Teknologi
+            </h2>
+            <dl class="mt-6 grid max-w-[900px] grid-cols-1 gap-px overflow-hidden rounded-lg border border-ink/10 bg-ink/10 sm:grid-cols-2">
+              {project.stack.map((item) => (
+                <div class="bg-white/[.9] p-5">
+                  <dt class="font-mono text-[13px] font-semibold text-ink">{item.name}</dt>
+                  <dd class="mt-1.5 text-[15px] leading-[1.5] text-ink/60">{item.role}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </FigmaPanel>
+
+        <!-- Outcome -->
+        <FigmaPanel frame="Hasil" meta={`${project.outcome.length} paragraf`}>
+          <div class="p-6 md:p-8">
+            <h2 class="text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[32px]">
+              Hasil
+            </h2>
+            <div class="mt-5 max-w-[760px] space-y-5">
+              {project.outcome.map((para) => (
+                <p class="text-[18px] leading-[1.65] tracking-[-0.01em] text-ink/80">{para}</p>
+              ))}
+            </div>
+            <div class="mt-7">
+              <ArrowLink href={project.url} label="Kunjungi proyek live" tone="ink" size="text-sm" external />
+            </div>
+          </div>
+        </FigmaPanel>
+      </div>
+
+      <!-- 04 Related projects -->
+      {
+        related.length > 0 && (
+          <section aria-label="Proyek lain" class="mt-16 md:mt-24">
+            <div class="mb-4 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+              <span class="text-accent" aria-hidden="true">#</span>
+              <span class="text-ink/70">Proyek Lain</span>
+              <span class="ml-auto text-ink/65">{related.length} proyek</span>
+            </div>
+            <div class="flex flex-wrap items-end justify-between gap-4">
+              <h2 class="text-[36px] font-semibold leading-[1.02] tracking-[-0.03em] md:text-[48px]">Proyek lain</h2>
+              <ArrowLink href="/work/" label="Semua proyek" tone="ink" size="text-sm" class="pb-1" />
+            </div>
+            <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {related.map((p) => (
+                <a href={`/work/${p.slug}/`} class="group block text-ink">
+                  <div class="mb-2.5 flex items-center justify-between font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-ink/65">
+                    <span>#{p.year}</span>
+                    <span>{p.category}</span>
+                  </div>
+                  <div class="relative">
+                    <div class="overflow-hidden rounded-md border border-ink/10">
+                      <Img
+                        src={p.cover}
+                        alt={p.coverAlt}
+                        sizes="(min-width: 1280px) 31vw, (min-width: 768px) 46vw, 100vw"
+                        loading="lazy"
+                        class="aspect-[16/10] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      />
+                    </div>
+                    <SelectionFrame class="opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </div>
+                  <h3 class="mt-4 text-[20px] font-semibold tracking-[-0.01em] text-ink transition-colors duration-300 group-hover:text-accent">
+                    {p.title}
+                  </h3>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- 05 CTA -->
+      <FigmaPanel frame="Ajakan" meta="Kontak" tabs={["Proyek", "Kontak"]} class="mt-16 bg-ink/[0.02] md:mt-24">
+        <div class="flex flex-col gap-6 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div class="max-w-[560px]">
+            <h2 class="text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[32px]">
+              Punya proyek serupa?
+            </h2>
+            <p class="mt-3 text-[16px] leading-[1.6] text-ink/70">
+              Ceritakan kebutuhan Anda. Kami balas dalam 1 hari kerja dengan ide awal dan estimasi harga.
+            </p>
+          </div>
+          <a
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,0.55)]"
+          >
+            {"Konsultasi gratis"}<ArrowMark />
+          </a>
+        </div>
+      </FigmaPanel>
+    </article>
+  </div>
+</Layout>

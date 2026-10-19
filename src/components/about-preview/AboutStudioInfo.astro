@@ -1,0 +1,13 @@
+---
+const facts = [
+  ['Berbasis di', 'Yogyakarta, Indonesia'],
+  ['Fokus', 'Web development, Shopify & Automasi AI'],
+  ['Melayani', 'Seluruh Indonesia & luar negeri'],
+];
+---
+<dl id="studio-information" tabindex="-1" data-about-facts class="mt-10 flex scroll-mt-8 flex-wrap justify-between gap-6 border-t border-ink/10 outline-none">
+  {facts.map(([label,value]) => <div class="pt-4 pr-4">
+    <dt class="mb-2 block font-['AboutMono',monospace] text-[11px] font-medium leading-none tracking-[.05em] text-ink/65 uppercase">{label}</dt>
+    <dd class="text-[16px] font-medium leading-[1.3] tracking-[-.015em]">{value}</dd>
+  </div>)}
+</dl>

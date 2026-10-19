@@ -1,0 +1,80 @@
+---
+import GlyphIcon from "../GlyphIcon.astro";
+import Img from "../Img.astro";
+import AboutSelection from './AboutSelection.astro';
+---
+<div data-about-photo class="relative aspect-[4/5] w-full max-[1000px]:max-w-[520px]">
+  <div class="absolute -top-6 left-0 flex w-full justify-between font-['AboutMono',monospace] text-[11px] font-medium leading-none text-ink/65">
+    <span><GlyphIcon name="square" class="text-accent" /> tentang-ilmantara.webp</span>
+    <span data-about-crop>Crop · 560 × 700</span>
+  </div>
+  <div class="absolute inset-0 overflow-hidden rounded-[4px] shadow-[0_40px_70px_-40px_rgba(12,12,14,.55)]">
+    <Img data-about-image src="/images/tentang-ilmantara.webp" alt="Sketching interface ideas on a tablet" title="Sketching interface ideas on a tablet" width="1120" height="1400" draggable="false" sizes="(min-width: 1000px) 520px, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+    <div data-about-mask aria-hidden="true" class="absolute inset-0 bg-paper/62 opacity-0"></div>
+  </div>
+  <div data-about-frame aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <AboutSelection size={10} photo />
+    <div data-about-grid class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)] bg-size-[33.33%_33.33%] opacity-0"></div>
+  </div>
+  <div data-about-cursor aria-hidden="true" class="pointer-events-none absolute top-[96%] left-[92%] z-5">
+    <svg width="20" height="22" viewBox="0 0 20 22" class="absolute -top-0.5 -left-0.5 drop-shadow-[0_2px_3px_rgba(0,0,0,.2)]"><path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill="#FF5B24" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" /></svg>
+    <div class="absolute top-[17px] left-[14px] rounded-[3px_8px_8px_8px] bg-[#FF5B24] px-[7px] py-[5px] text-[11px] font-medium leading-none whitespace-nowrap text-ink">Dimas</div>
+  </div>
+</div>
+
+<script>
+  // Scroll-driven crop reveal, like the reference About image: a paper
+  // overlay (window-frame clip-path mask) + blue crop frame with thirds
+  // grid opens 16% → 0% while the photo eases scale 1.14 → 1.
+  function initAboutPhoto() {
+    const photo = document.querySelector("[data-about-photo]");
+    if (!photo) return;
+    const img = photo.querySelector("[data-about-image]");
+    const mask = photo.querySelector("[data-about-mask]");
+    const frame = photo.querySelector("[data-about-frame]");
+    const grid = photo.querySelector("[data-about-grid]");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+    const easeOutQuart = (t) => 1 - (1 - t) ** 4;
+
+    function paint(p) {
+      const b = easeOutQuart(clamp(p));
+      const v = 16 * (1 - b);
+      if (mask instanceof HTMLElement) {
+        mask.style.clipPath = `polygon(0 0,100% 0,100% 100%,0 100%,0 ${v}%,${v}% ${v}%,${v}% ${100 - v}%,${100 - v}% ${100 - v}%,${100 - v}% ${v}%,0 ${v}%)`;
+        mask.style.opacity = v < 0.4 ? "0" : "1";
+      }
+      if (frame instanceof HTMLElement) {
+        frame.style.left = `${v}%`;
+        frame.style.top = `${v}%`;
+        frame.style.right = `${v}%`;
+        frame.style.bottom = `${v}%`;
+        frame.style.opacity = String(1 - b);
+      }
+      if (grid instanceof HTMLElement) grid.style.opacity = String(1 - b);
+      if (img instanceof HTMLElement) img.style.transform = `scale(${(1.14 - 0.14 * b).toFixed(3)})`;
+    }
+
+    if (reduce) {
+      paint(1);
+      return;
+    }
+    let tick = 0;
+    function measure() {
+      tick = 0;
+      const r = photo.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      paint((vh * 0.9 - r.top) / (vh * 0.55));
+    }
+    function requestMeasure() {
+      if (!tick) tick = requestAnimationFrame(measure);
+    }
+    window.addEventListener("scroll", requestMeasure, { passive: true });
+    window.addEventListener("resize", requestMeasure);
+    measure();
+  }
+
+  // See home/Services.astro's initServices for why this needs
+  // `astro:page-load` instead of running once at parse time.
+  document.addEventListener("astro:page-load", initAboutPhoto);
+</script>

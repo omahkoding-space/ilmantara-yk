@@ -1,0 +1,125 @@
+---
+import Layout from "../layouts/Layout.astro";
+import JournalCard from "../components/journal/JournalCard.astro";
+import { POSTS } from "../data/journal";
+
+// Static listing — CMS integration removed, edit src/data/journal.ts.
+// No skills strip here, matching the reference journal page.
+const [featured, ...archive] = POSTS;
+---
+
+<Layout
+  path="/journal/"
+  lang="id"
+  title="Jurnal – Website, Shopify & Bisnis Online | Ilmantara"
+  description="Jurnal Ilmantara: panduan biaya website di Jogja, Shopify untuk UMKM, dan cara memilih software house. Ditulis dari Yogyakarta, diperbarui setiap bulan."
+  alternates={[
+    { hreflang: "id", href: "/journal/" },
+    { hreflang: "x-default", href: "/journal/" },
+  ]}
+>
+  <div class="relative overflow-hidden bg-paper text-ink">
+    <!-- Figma canvas: dotted grid over the paper background -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 opacity-[.55]"
+      style="background-image: radial-gradient(circle at 1px 1px, rgba(12,12,14,0.16) 1px, transparent 1.2px); background-size: 24px 24px;"
+    >
+    </div>
+
+    <!-- 01 Page header -->
+    <header class="relative w-full">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0"
+        style="background: radial-gradient(1100px 500px at 30% 40%, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);"
+      >
+      </div>
+      <div class="relative mx-auto max-w-[1312px] px-5 pb-14 pt-[120px] sm:px-8 sm:pb-[72px] sm:pt-[140px] lg:px-16 lg:pb-24 lg:pt-[168px]">
+        <!-- breadcrumb -->
+        <div class="flex items-center gap-2.5 font-mono text-xs font-medium text-ink/65">
+          <svg width="14" height="14" viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M3.5 1v10M8.5 1v10M1 3.5h10M1 8.5h10" stroke="#4B3BFF" stroke-width="1.2"></path>
+          </svg>
+          <span>Ilmantara</span>
+          <span class="opacity-50">/</span>
+          <span class="text-ink">Jurnal</span>
+        </div>
+
+        <!-- title with design-tool selection box -->
+        <h1 class="relative mt-11 inline-block px-3.5 pb-3.5 pt-1.5 text-[56px] font-semibold leading-[0.9] tracking-[-0.065em] sm:text-[96px] lg:px-[14px] lg:pb-[14px] lg:pt-[6px] lg:text-[148px]">
+          Jurnal
+          <!-- selection frame -->
+          <span aria-hidden="true" class="absolute inset-0">
+            <span class="absolute inset-0 border-[1.5px] border-accent"></span>
+            <span class="absolute left-0 top-0 h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-1/2 top-0 h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-full top-0 h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-full top-1/2 h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-full top-full h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-1/2 top-full h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-0 top-full h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <span class="absolute left-0 top-1/2 h-[11px] w-[11px] -translate-x-1/2 -translate-y-1/2 border-[1.5px] border-accent bg-white"></span>
+            <!-- label -->
+            <span class="absolute left-1/2 top-full w-max -translate-x-1/2 translate-y-[6px] whitespace-nowrap rounded bg-accent px-[7px] py-[5px] font-mono text-[11px] font-medium leading-none tracking-normal text-white">
+              Teks · Geist Semibold
+            </span>
+            <!-- collaborator cursor -->
+            <span class="absolute -right-2 -top-[6px]">
+              <svg width="20" height="22" viewBox="0 0 20 22" style="position:absolute;left:-2px;top:-2px;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.2));">
+                <path d="M2.5 2.5 L2.5 18 L7 13.8 L10.2 20.4 L13 19.1 L9.9 12.6 L16 12.3 Z" fill="#FF5B24" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"></path>
+              </svg>
+              <span class="absolute left-[14px] top-[17px] whitespace-nowrap rounded-[3px_8px_8px_8px] bg-[#FF5B24] px-[7px] py-[5px] font-mono text-[11px] font-medium leading-none tracking-normal text-ink">
+                Dimas
+              </span>
+            </span>
+          </span>
+        </h1>
+
+        <!-- description + facts -->
+        <div class="mt-12 grid grid-cols-1 items-end gap-7 lg:grid-cols-2 lg:gap-16">
+          <p class="m-0 max-w-[620px] text-[24px] font-medium leading-[1.32] tracking-[-0.025em] [text-wrap:pretty]">
+            Panduan website, Shopify, dan bisnis online untuk UMKM. Ditulis langsung, sebulan sekali.
+          </p>
+          <div class="flex flex-col gap-3 border-t border-ink/10 sm:flex-row sm:gap-0">
+            <span class="flex-1 pb-0 pr-4 pt-[14px] font-mono text-xs font-medium uppercase leading-[1.35] tracking-[0.03em] text-ink/60">{POSTS.length} esai</span>
+            <span class="flex-1 pb-0 pr-4 pt-[14px] font-mono text-xs font-medium uppercase leading-[1.35] tracking-[0.03em] text-ink/60">Bulanan</span>
+            <span class="flex-1 pb-0 pr-4 pt-[14px] font-mono text-xs font-medium uppercase leading-[1.35] tracking-[0.03em] text-ink/60">Website, Shopify, biaya, tips</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="relative mx-auto max-w-[1312px] px-5 pb-24 sm:px-8 lg:px-16">
+      <!-- 02 Latest -->
+      <section aria-label="Esai terbaru" class="mt-14 md:mt-20">
+        <div class="mb-4 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+          <span class="text-accent" aria-hidden="true">#</span>
+          <span class="text-ink/70">Terbaru</span>
+          <span class="ml-auto text-ink/65">Pilihan editor</span>
+        </div>
+        <JournalCard post={featured} selected priority titleTag="h2" titleClass="text-[32px] md:text-[44px]" sizes="(min-width: 1312px) 1184px, 100vw" />
+      </section>
+
+      <!-- 03 Archive -->
+      <section aria-label="Semua esai" class="mt-20 md:mt-28">
+        <div class="mb-4 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+          <span class="text-accent" aria-hidden="true">#</span>
+          <span class="text-ink/70">Arsip</span>
+          <span class="ml-auto text-ink/65">{archive.length} esai</span>
+        </div>
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h2 class="text-[44px] font-semibold leading-[1.02] tracking-[-0.035em] md:text-[56px]">
+            Semua tulisan
+          </h2>
+          <p class="pb-2 text-[18px] text-ink/70">Terbaru dulu.</p>
+        </div>
+        <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {archive.map((post) => (
+            <JournalCard post={post} />
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

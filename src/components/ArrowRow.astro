@@ -1,0 +1,26 @@
+---
+import ArrowMark from "./ArrowMark.astro";
+
+// Baris link + panah dengan hover terpadu: teks jadi accent, panah geser
+// (tanpa layout-shift). line "top": garis atas ala kartu; "bottom": garis
+// bawah ala tautan CTA.
+const {
+  href,
+  label,
+  external = false,
+  line = "top",
+  class: cls = "",
+} = Astro.props;
+
+const lines = {
+  top: "flex items-center justify-between gap-4 border-t border-ink/[0.08] pt-[18px]",
+  bottom: "inline-flex items-center gap-4 border-b-[1.5px] border-current pb-1.5",
+};
+---
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  title={label}
+  class={`group text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-200 hover:text-accent ${lines[line]} ${cls}`}
+><span>{label}</span><ArrowMark /></a>

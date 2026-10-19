@@ -1,0 +1,44 @@
+---
+import { POSTS } from "../../data/journal";
+import ArrowLink from "../ArrowLink.astro";
+import Img from "../Img.astro";
+
+const TEASER = POSTS.slice(0, 3);
+---
+
+<section data-framer-name="10 Journal" class="px-6 py-24 md:px-10 md:pb-32">
+  <p class="font-mono text-xs font-medium tracking-wide text-ink/65">
+    <span class="text-accent">[10]</span> JURNAL
+  </p>
+
+  <div class="mt-4 grid gap-10 lg:grid-cols-[1fr_320px]">
+    <h2 class="text-[56px] font-semibold leading-[1.05] tracking-[-0.03em] text-ink md:text-[64px]">
+      Catatan dari lapangan
+    </h2>
+    <div>
+      <p class="text-ink/70">
+        Esai pendek soal riset, sistem, dan bisnis desain. Satu tulisan sebulan, tanpa
+        pop-up newsletter.
+      </p>
+      <ArrowLink href="/journal/" label="Baca jurnal" tone="ink" size="text-sm" class="mt-3 inline-block" />
+    </div>
+  </div>
+
+  <div class="mt-10 grid gap-6 lg:grid-cols-3">
+    {TEASER.map((post) => (
+      <a href={`/journal/${post.slug}/`} title={post.title} class="group block overflow-hidden rounded-2xl bg-white">
+        <div class="overflow-hidden">
+          <Img src={post.cover} alt={post.coverAlt} title={post.coverAlt} sizes="(min-width: 1024px) 30vw, 100vw" loading="lazy" class="h-[280px] w-full rounded-t-2xl object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
+        </div>
+        <div class="p-6">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-mono font-medium uppercase text-accent">{post.tag}</span>
+            <span class="font-mono uppercase text-ink/65">{post.readTime}</span>
+          </div>
+          <h3 class="mt-4 text-xl font-semibold leading-snug text-ink transition-colors duration-300 group-hover:text-accent">{post.title}</h3>
+          <p class="mt-3 text-sm text-ink/60">{post.excerpt}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,90 @@
+---
+import GlyphIcon from "./GlyphIcon.astro";
+import SelectionFrame from "./SelectionFrame.astro";
+
+interface Props {
+  src: string;
+  alt?: string;
+  label?: string;
+  aspect?: string;
+  rounded?: string;
+  class?: string;
+}
+const {
+  src,
+  alt = "",
+  label = "Preview",
+  aspect = "aspect-[16/8]",
+  rounded = "rounded-[24px]",
+  class: cls = "",
+} = Astro.props;
+---
+<figure data-reveal class={`relative ${cls}`}>
+  <div class="absolute -top-6 left-0 flex w-full justify-between font-mono text-[11px] font-medium leading-none text-ink/65">
+    <span><GlyphIcon name="square" class="text-accent" /> {label}</span>
+  </div>
+  <div class={`relative overflow-hidden ${rounded} ${aspect} shadow-[0_40px_70px_-40px_rgba(12,12,14,.55)]`}>
+    <img data-reveal-img src={src} alt={alt} loading="lazy" draggable="false" class="absolute inset-0 h-full w-full object-cover" />
+    <div data-reveal-mask aria-hidden="true" class="absolute inset-0 bg-paper/62 opacity-0"></div>
+  </div>
+  <div data-reveal-frame aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <SelectionFrame size={10} />
+    <div data-reveal-grid class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.5)_1px,transparent_1px)] bg-size-[33.33%_33.33%] opacity-0"></div>
+  </div>
+</figure>
+
+<script>
+  // Scroll-driven crop reveal ala About: overlay kertas (clip-path jendela)
+  // + frame crop biru + grid membuka 16% → 0%, foto ease scale 1.14 → 1.
+  function initScrollReveal() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+    const easeOutQuart = (t: number) => 1 - (1 - t) ** 4;
+
+    function paint(photo: Element, p: number) {
+      const b = easeOutQuart(clamp(p, 0, 1));
+      const v = 16 * (1 - b);
+      const img = photo.querySelector("[data-reveal-img]");
+      const mask = photo.querySelector("[data-reveal-mask]");
+      const frame = photo.querySelector("[data-reveal-frame]");
+      const grid = photo.querySelector("[data-reveal-grid]");
+      if (mask instanceof HTMLElement) {
+        mask.style.clipPath = `polygon(0 0,100% 0,100% 100%,0 100%,0 ${v}%,${v}% ${v}%,${v}% ${100 - v}%,${100 - v}% ${100 - v}%,${100 - v}% ${v}%,0 ${v}%)`;
+        mask.style.opacity = v < 0.4 ? "0" : "1";
+      }
+      if (frame instanceof HTMLElement) {
+        frame.style.left = `${v}%`;
+        frame.style.top = `${v}%`;
+        frame.style.right = `${v}%`;
+        frame.style.bottom = `${v}%`;
+        frame.style.opacity = String(1 - b);
+      }
+      if (grid instanceof HTMLElement) grid.style.opacity = String(1 - b);
+      if (img instanceof HTMLElement) img.style.transform = `scale(${(1.14 - 0.14 * b).toFixed(3)})`;
+    }
+
+    document.querySelectorAll("[data-reveal]").forEach((photo) => {
+      if (reduce) {
+        paint(photo, 1);
+        return;
+      }
+      let tick = 0;
+      function measure() {
+        tick = 0;
+        const r = photo.getBoundingClientRect();
+        const vh = window.innerHeight || 800;
+        paint(photo, (vh * 0.9 - r.top) / (vh * 0.55));
+      }
+      function requestMeasure() {
+        if (!tick) tick = requestAnimationFrame(measure);
+      }
+      window.addEventListener("scroll", requestMeasure, { passive: true });
+      window.addEventListener("resize", requestMeasure);
+      measure();
+    });
+  }
+
+  // See Services.astro's initServices for why this needs `astro:page-load`
+  // instead of running once at parse time.
+  document.addEventListener("astro:page-load", initScrollReveal);
+</script>

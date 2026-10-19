@@ -1,0 +1,23 @@
+---
+import AboutPhoto from "../about-preview/AboutPhoto.astro";
+import AboutSelection from "../about-preview/AboutSelection.astro";
+import AboutStudioInfo from "../about-preview/AboutStudioInfo.astro";
+import AboutTechnologies from "../about-preview/AboutTechnologies.astro";
+---
+<section id="about" data-about-section aria-labelledby="about-heading" class="w-full scroll-mt-14 overflow-x-clip bg-paper font-sans text-ink">
+  <div data-about-inner class="mx-auto grid max-w-[1312px] grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-[88px] px-16 py-[150px] max-[1000px]:grid-cols-1 max-[1000px]:gap-14 max-[1000px]:px-8 max-[1000px]:py-[110px] max-[640px]:px-5 max-[640px]:py-[88px]">
+    <AboutPhoto />
+    <div data-about-copy class="transition-[opacity,transform,filter] duration-[800ms] ease-[cubic-bezier(.22,1,.36,1)] data-[seen=false]:translate-y-[18px] data-[seen=false]:opacity-0 data-[seen=false]:blur-[4px] motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none">
+      <div class="flex items-center gap-[10px] font-mono text-[11px] font-medium leading-none tracking-[.05em] text-ink/65 capitalize"><b class="font-medium text-accent"># Ilmantara /</b> Tentang</div>
+      <h2 id="about-heading" data-about-heading class="mt-[26px] text-[46px] font-medium leading-[1.12] tracking-[-.04em] [text-wrap:pretty] max-[1000px]:text-[38px] max-[640px]:text-[29px]">Software House di Jogja yang Paham <span data-about-selected class="relative mx-[.02em] inline-block px-[.08em]">Desain dan Kode<AboutSelection /></span></h2>
+      <div data-about-body class="mt-10 grid grid-cols-2 gap-7 text-[17px] font-normal leading-[1.55] tracking-[-.01em] text-ink/74 max-[640px]:grid-cols-1 max-[640px]:gap-4">
+        <p>Ilmantara adalah software house di Yogyakarta yang fokus pada web development, Shopify, dan automasi AI.</p>
+        <div class="space-y-4">
+          <p>Kami menangani desain, frontend, backend, hingga peluncuran, jadi Anda cukup berbicara dengan satu tim.</p>
+        </div>
+      </div>
+      <AboutStudioInfo />
+      <AboutTechnologies />
+    </div>
+  </div>
+</section>

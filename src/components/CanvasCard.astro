@@ -1,0 +1,11 @@
+---
+interface Props { rounded?: string; class?: string }
+const { rounded = "rounded-2xl", class: cls = "" } = Astro.props;
+const points = [[0,0],[50,0],[100,0],[100,50],[100,100],[50,100],[0,100],[0,50]];
+---
+<div class={`group/canvas relative ${cls}`}>
+  <slot />
+  <div aria-hidden="true" class={`pointer-events-none absolute inset-0 border-[1.5px] border-accent opacity-0 transition-opacity duration-300 group-hover/canvas:opacity-100 ${rounded}`}>
+    {points.map(([x,y]) => <span class="absolute border-[1.5px] border-accent bg-white" style={`left:${x}%;top:${y}%;width:8px;height:8px;margin-left:-4px;margin-top:-4px;`} />)}
+  </div>
+</div>

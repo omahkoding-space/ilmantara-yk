@@ -1,0 +1,108 @@
+---
+import Img from "./Img.astro";
+
+const currentPath = new URL(Astro.request.url).pathname;
+
+// Static per-page label (server-rendered). On the homepage this is just the
+// initial state — the client script below takes over and swaps it per
+// section as the user scrolls. On every other page it stays as-is.
+const PAGE_LABELS = [
+  { test: (p: string) => p.startsWith("/work/"), label: "Portofolio" },
+  { test: (p: string) => p.startsWith("/journal/"), label: "Jurnal" },
+  { test: (p: string) => p.startsWith("/jasa-"), label: "Layanan" },
+  { test: (p: string) => p.startsWith("/contact/"), label: "Kontak" },
+];
+
+function pageLabel(pathname: string) {
+  return PAGE_LABELS.find((item) => item.test(pathname))?.label ?? "Beranda";
+}
+
+const label = pageLabel(currentPath);
+---
+
+<a href="/" title="Ilmantara – Beranda" class="flex items-center gap-2.5 select-none">
+  <Img src="/ilmantara.webp" alt="Ilmantara logo" title="Ilmantara logo" width="44" height="44" sizes="22px" class="h-[22px] w-auto shrink-0" />
+  <span class="flex items-center gap-2.5 leading-none">
+    <span id="site-tag" class="text-[13px] tracking-[-0.01em] text-ink/65">
+      / <span data-tag-label>{label}</span>
+    </span>
+  </span>
+</a>
+
+<script>
+  // The header persists across page swaps (transition:persist), so its DOM
+  // never gets the server-rendered label for the new page — this recomputes
+  // it client-side on every navigation, same reason Header.astro recomputes
+  // its active nav link instead of trusting the server-rendered class.
+  const PAGE_LABELS: { test: (p: string) => boolean; label: string }[] = [
+    { test: (p) => p.startsWith("/work/"), label: "Portofolio" },
+    { test: (p) => p.startsWith("/journal/"), label: "Jurnal" },
+    { test: (p) => p.startsWith("/jasa-"), label: "Layanan" },
+    { test: (p) => p.startsWith("/contact/"), label: "Kontak" },
+  ];
+  const pageLabel = (pathname: string) =>
+    PAGE_LABELS.find((item) => item.test(pathname))?.label ?? "Beranda";
+
+  // Homepage sections, in document order, each with the label shown in the
+  // header tag while that section is in view.
+  const SECTIONS = [
+    { id: "about", label: "Tentang" },
+    { id: "selected-work", label: "Portofolio" },
+    { id: "services", label: "Layanan" },
+    { id: "testimonials", label: "Testimoni" },
+    { id: "playground", label: "Permainan" },
+    { id: "faq", label: "Pertanyaan" },
+    { id: "next-steps", label: "Langkah Berikutnya" },
+  ];
+
+  let cleanupScroll: (() => void) | null = null;
+
+  function initSiteTag() {
+    cleanupScroll?.();
+    cleanupScroll = null;
+
+    const tag = document.getElementById("site-tag");
+    const labelEl = tag?.querySelector("[data-tag-label]");
+    if (!(labelEl instanceof HTMLElement)) return;
+
+    function setTag(sectionLabel: string | null) {
+      labelEl.textContent = sectionLabel ?? "Beranda";
+    }
+
+    const isHome = window.location.pathname === "/";
+    if (!isHome) {
+      setTag(null);
+      labelEl.textContent = pageLabel(window.location.pathname);
+      return;
+    }
+
+    const tracked = SECTIONS.map((s) => ({ ...s, el: document.getElementById(s.id) })).filter(
+      (s): s is { id: string; label: string; el: HTMLElement } => s.el instanceof HTMLElement,
+    );
+
+    function update() {
+      const header = document.querySelector("[data-nav]");
+      const line = (header instanceof HTMLElement ? header.getBoundingClientRect().height : 56) + 40;
+      let current: string | null = null;
+      for (const section of tracked) {
+        const rect = section.el.getBoundingClientRect();
+        if (rect.top <= line && rect.bottom > line) {
+          current = section.label;
+          break;
+        }
+      }
+      setTag(current);
+    }
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+
+    cleanupScroll = () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }
+
+  document.addEventListener("astro:page-load", initSiteTag);
+</script>

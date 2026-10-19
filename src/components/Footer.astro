@@ -1,0 +1,237 @@
+---
+import GlyphIcon from "./GlyphIcon.astro";
+import { EMAIL, WHATSAPP_LINK, PHONE_DISPLAY, MAPS_LINK } from "../lib/site";
+// Static content — CMS integration removed, edit directly here.
+const navigation = [
+  { label: "Beranda", href: "/" },
+  { label: "Portofolio", href: "/work/" },
+  { label: "Tentang", href: "/#about" },
+  { label: "Layanan", href: "/#services" },
+  { label: "Jurnal", href: "/journal/" },
+  { label: "Permainan", href: "/#playground" },
+];
+// "Lainnya": the ways to actually reach us — WhatsApp, email, map — not
+// third-party profile links.
+const ELSEWHERE = [
+  { label: PHONE_DISPLAY, href: WHATSAPP_LINK, external: true, muted: false },
+  { label: EMAIL, href: `mailto:${EMAIL}`, external: true, muted: false },
+  { label: "Lokasi Kantor", href: MAPS_LINK, external: true, muted: false },
+];
+const siteSettings = { name: "Ilmantara", location: "Jalan Nangka, Wedomartani, Sleman, DI Yogyakarta" };
+
+const PAGES = navigation.map((item) => ({ label: item.label, to: item.href }));
+
+// The "Copy email" button copies the site email address.
+const copyEmail = EMAIL;
+
+// Position of each of the 8 Figma/Framer-style selection handles around the
+// footer mark, ported 1:1 from the reference's `.lff-mark` overlay (corners
+// + edge midpoints of the bounding box).
+const HANDLES = [
+  { left: "0%", top: "0%" },
+  { left: "50%", top: "0%" },
+  { left: "100%", top: "0%" },
+  { left: "100%", top: "50%" },
+  { left: "100%", top: "100%" },
+  { left: "50%", top: "100%" },
+  { left: "0%", top: "100%" },
+  { left: "0%", top: "50%" },
+];
+---
+
+<footer id="next-steps" data-framer-name="Footer" class="bg-paper [container-type:inline-size]">
+  <div class="mx-auto max-w-[1312px] px-5 pb-6 pt-[88px] sm:px-8 sm:pb-7 sm:pt-[110px] lg:px-16 lg:pb-8 lg:pt-[140px]">
+  <p class="font-mono  capitalize text-xs font-medium tracking-wide text-accent"># Ilmantara /<span class="text-ink/65"> Langkah Berikutnya</span></p>
+
+  <div class="mt-4 grid gap-10 sm:grid-cols-2 xl:grid-cols-[1fr_280px_280px]">
+    <div class="sm:col-span-2 xl:col-span-1">
+      <h2 class="text-[38px] font-semibold leading-[1.05] tracking-[-0.03em] text-ink sm:text-[56px] md:text-[64px]">
+        Siap Punya Website yang
+        <span class="relative inline-block px-[0.06em] -mx-[0.02em]">Mendatangkan
+          <div class="pointer-events-none absolute inset-0" style="border: 1.5px solid rgb(var(--color-accent-rgb)); opacity: 1;">
+            {HANDLES.map((handle) => (
+              <span
+                class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white"
+                style={`left: ${handle.left}; top: ${handle.top}; border: 1.5px solid rgb(var(--color-accent-rgb));`}
+              />
+            ))}
+          </div>
+        </span>
+        pelanggan?
+      </h2>
+      <p class="mt-4 text-ink/70">
+        Ceritakan kebutuhan bisnis Anda. Kami balas dalam 1 hari kerja dengan ide
+        awal dan estimasi harga.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={WHATSAPP_LINK}
+          target="_blank"
+          rel="noopener"
+          title="Chat WhatsApp"
+          class="flex items-center gap-1.5 rounded-xl bg-ink px-4 py-3 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,0.55)]"
+        >
+          Chat WhatsApp
+        </a>
+        <button
+          type="button"
+          data-copy-email={copyEmail}
+          class="flex items-center gap-1.5 rounded-xl bg-white px-4 py-3 text-sm font-medium text-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_26px_-14px_rgba(12,12,14,0.55)]"
+        >
+          Salin email
+        </button>
+      </div>
+    </div>
+
+    <div class="grid gap-10 sm:col-span-2 sm:grid-cols-2 xl:contents">
+    <div class="rounded-2xl bg-white p-6">
+      <div class="flex items-center justify-between text-sm">
+        <span class="font-medium text-ink">Halaman</span>
+        <span class="text-ink/65">{PAGES.length}</span>
+      </div>
+      <ul class="mt-4 space-y-3">
+        {PAGES.map((page, i) => (
+          <li class="w-full text-sm">
+            <a href={page.to} title={page.label} class="rounded-[7px] flex items-center justify-between text-sm font-medium text-ink transition-colors duration-200 hover:text-accent">
+              {page.label}
+            <GlyphIcon name="upRight" class="font-mono text-ink/65" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6">
+      <div class="flex items-center justify-between text-sm">
+        <span class="font-medium text-ink">Lainnya</span>
+        <span class="text-ink/65" aria-hidden="true">{ELSEWHERE.length}</span>
+      </div>
+      <ul class="mt-4 space-y-3">
+        {ELSEWHERE.map((item) => (
+          <li class="flex items-center justify-between text-sm">
+            <a
+              href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+              title={item.label}
+              class={item.muted ? "rounded-[7px] text-ink/65 transition-colors duration-200 hover:text-accent" : "rounded-[7px] font-medium text-ink transition-colors duration-200 hover:text-accent"}
+            >
+              {item.label}
+            </a>
+            <span class="text-ink/30" aria-hidden="true">
+              {item.muted ? "@" : <GlyphIcon name="upRight" />}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    </div>
+  </div>
+
+  <div
+    id="footer-mark"
+    aria-hidden="true"
+    class="relative mt-[56px] w-max max-w-full select-none whitespace-nowrap font-bold leading-[0.8] tracking-[-0.065em] transition-colors duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] text-transparent [-webkit-text-stroke:1.5px_rgb(12,12,14)] text-[min(20.2cqw,280px)] min-[768px]:mt-[88px]"
+  >
+    {siteSettings.name}
+    <div class="pointer-events-none absolute inset-0" style="border: 1.5px solid rgb(var(--color-accent-rgb)); opacity: 1;">
+      {HANDLES.map((handle) => (
+        <span
+          class="absolute h-2.5 w-2.5 -ml-[5px] -mt-[5px] bg-white"
+          style={`left: ${handle.left}; top: ${handle.top}; border: 1.5px solid rgb(var(--color-accent-rgb));`}
+        />
+      ))}
+    </div>
+  </div>
+
+  <div class="relative z-10 mt-6 flex flex-row flex-wrap items-center gap-x-4 gap-y-1 border-t border-ink/10 pt-6 text-xs text-ink/65 sm:justify-between">
+    <span>© 2026 {siteSettings.name} · Software House Jogja</span>
+    <span>Jalan Nangka, Wedomartani, Sleman, DI Yogyakarta 55584</span>
+    <button type="button" data-back-to-top title="Kembali ke atas" class="cursor-pointer hover:text-ink sm:ml-auto">Kembali ke atas</button>
+  </div>
+  </div>
+</footer>
+
+<script>
+  // A plain button, not an <a href="#top">: Astro's ClientRouter (view
+  // transitions) intercepts same-page hash link clicks and swallows the
+  // scroll, so a real anchor jump never fires — this scrolls manually instead.
+  document.querySelector("[data-back-to-top]")?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  const button = document.querySelector("[data-copy-email]");
+  button?.addEventListener("click", async () => {
+    const email = button.getAttribute("data-copy-email") ?? "";
+    const originalLabel = button.textContent;
+    try {
+      await navigator.clipboard.writeText(email);
+      button.textContent = "Tersalin!";
+    } catch {
+      button.textContent = "Gagal menyalin";
+    }
+    setTimeout(() => {
+      button.textContent = originalLabel;
+    }, 1800);
+  });
+
+  // Fit-to-width: scale the mark up or down so the site name always spans
+  // the full content width exactly, on mobile, tablet and desktop.
+  const mark = document.getElementById("footer-mark");
+  function fitMark() {
+    if (!mark || !mark.parentElement) return;
+    mark.style.fontSize = "";
+    const parent = mark.parentElement;
+    const pStyle = getComputedStyle(parent);
+    const avail =
+      parent.clientWidth - parseFloat(pStyle.paddingLeft) - parseFloat(pStyle.paddingRight);
+    const naturalWidth = mark.scrollWidth;
+    if (naturalWidth > 0 && Math.abs(naturalWidth - avail) > 1) {
+      const computed = parseFloat(getComputedStyle(mark).fontSize) || 16;
+      mark.style.fontSize = `${(computed * avail) / naturalWidth}px`;
+    }
+  }
+  fitMark();
+  window.addEventListener("resize", fitMark);
+  if (document.fonts?.ready) document.fonts.ready.then(fitMark);
+
+  // Mark text fill (background always stays transparent) is whichever of
+  // "at the very bottom of the page" and "hovering the mark" is true, but
+  // not both — reaching the bottom fills the text in on its own, and
+  // hovering always flips whatever state is currently showing back the
+  // other way (so hovering while already at the bottom un-fills it again).
+  function isAtBottom() {
+    const doc = document.documentElement;
+    return window.scrollY + window.innerHeight >= doc.scrollHeight - 2;
+  }
+
+  let atBottom = isAtBottom();
+  let hovering = false;
+
+  function paintMark() {
+    if (!mark) return;
+    const filled = atBottom !== hovering;
+    mark.classList.toggle("text-ink", filled);
+    mark.classList.toggle("text-transparent", !filled);
+  }
+
+  mark?.addEventListener("mouseenter", () => {
+    hovering = true;
+    paintMark();
+  });
+  mark?.addEventListener("mouseleave", () => {
+    hovering = false;
+    paintMark();
+  });
+
+  function onScrollBottom() {
+    const next = isAtBottom();
+    if (next !== atBottom) {
+      atBottom = next;
+      paintMark();
+    }
+  }
+  window.addEventListener("scroll", onScrollBottom, { passive: true });
+  window.addEventListener("resize", onScrollBottom);
+  paintMark();
+</script>

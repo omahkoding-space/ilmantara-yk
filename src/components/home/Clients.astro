@@ -1,0 +1,77 @@
+---
+import GlyphIcon from "../GlyphIcon.astro";
+// Static content — CMS integration removed, edit directly here.
+// Edge fade (mask-image) keeps pills from looking hard-cut at the sides.
+const clients = [
+  { name: "Wellness Store", industry: "ECOMMERCE" },
+  { name: "Mise Art", industry: "SENI & KOMISI" },
+  { name: "Coffee Subscription", industry: "F&B" },
+  { name: "Berlin Retail", industry: "RITEL" },
+  { name: "Jakarta Boutique", industry: "FASHION" },
+  { name: "Startup Ops", industry: "APLIKASI WEB" },
+];
+const skills = [
+  { label: "Pengembangan Shopify" },
+  { label: "Aplikasi Shopify Custom" },
+  { label: "Pengembangan Theme" },
+  { label: "Backend Laravel" },
+  { label: "API & Database" },
+  { label: "Optimasi Kecepatan" },
+  { label: "QA Desain" },
+  { label: "Pemeliharaan & Dukungan" },
+];
+const SHOW = clients.length > 0 || skills.length > 0;
+---
+
+{SHOW && (
+<section data-framer-name="02 Clients" class="group px-6 py-8 md:px-10">
+  <style>
+    @keyframes clients-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes skills-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+  </style>
+
+  <div class="flex items-center gap-4">
+    <span class="flex shrink-0 items-center gap-1.5 whitespace-nowrap font-mono text-[11px] uppercase tracking-wide text-ink/65">
+      <GlyphIcon name="diamond" class="text-accent" />
+      Klien kami
+    </span>
+    <div class="h-px flex-1 bg-ink/10"></div>
+    <span class="shrink-0 whitespace-nowrap font-mono text-[11px] uppercase tracking-wide text-ink/65">
+      {clients.length} Klien · {skills.length} Keahlian
+    </span>
+  </div>
+
+  {clients.length > 0 && (
+  <div class="mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div class="flex w-max gap-3 [animation:clients-marquee_32s_linear_infinite] group-hover:[animation-play-state:paused]">
+      {[...clients, ...clients].map((client) => (
+        <div class="flex shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2.5 shadow-sm transition-all duration-300 hover:text-accent hover:shadow-[inset_0_0_0_1.5px_#4B3BFF]">
+          <GlyphIcon name="diamond" class="text-xs text-accent" />
+          <span class="text-sm font-semibold text-ink">{client.name}</span>
+          {client.industry && <span class="font-mono text-[10px] tracking-wide text-ink/65">{client.industry}</span>}
+        </div>
+      ))}
+    </div>
+  </div>
+  )}
+
+  {skills.length > 0 && (
+  <div class="mt-3 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+    <div class="flex w-max gap-3 [animation:skills-marquee_26s_linear_infinite] group-hover:[animation-play-state:paused]">
+      {[...skills, ...skills].map((skill) => (
+        <div class="flex shrink-0 items-center gap-2 rounded-full bg-ink/[0.06] px-4 py-2.5">
+          <span class="font-mono text-[10px] text-ink/65" aria-hidden="true">T</span>
+          <span class="text-sm text-ink/70">{skill.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+  )}
+</section>
+)}

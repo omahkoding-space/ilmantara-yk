@@ -1,0 +1,149 @@
+---
+import { FAQS } from "../../data/faq";
+import ArrowLink from "../ArrowLink.astro";
+
+const QUESTIONS = FAQS;
+---
+
+<section id="faq" data-framer-name="11 FAQ" class="w-full overflow-x-clip bg-paper text-ink">
+  <div class="mx-auto grid max-w-[1312px] items-start gap-9 px-5 py-20 min-[641px]:px-8 min-[641px]:py-[100px] min-[1001px]:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] min-[1001px]:gap-16 min-[1001px]:px-16 min-[1001px]:py-[130px]">
+    <div>
+      <p class="flex items-center gap-2.5 font-mono text-[11px] font-medium capitalize leading-none tracking-[0.05em] text-ink/65">
+        <b class="font-medium text-accent"># Ilmantara /</b> Pertanyaan
+      </p>
+      <h2 class="mt-[18px] text-[64px] font-semibold leading-[0.96] tracking-[-0.055em] text-ink">
+        Ada yang ingin Anda ketahui?
+      </h2>
+      <p class="mt-[18px] max-w-[420px] text-[18px] font-normal leading-[1.5] text-ink/72">
+        Mulai dari estimasi biaya hingga proses pengerjaan, kami menjawab pertanyaan yang perlu Anda ketahui sebelum memulai proyek. Jika masih ada yang belum jelas, mari diskusikan melalui WhatsApp.
+      </p>
+      <a
+        href="/contact/"
+        title="Tanya hal lain"
+        class="mt-[22px] inline-flex items-center gap-2.5 border-b-[1.5px] border-current pb-1.5 text-[15px] font-medium tracking-[-0.01em] text-ink transition-[gap,color] duration-200 hover:gap-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[3px]"
+      >
+        Tanya hal lain
+        <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" fill="none"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="overflow-hidden rounded-2xl border border-ink/[0.09] bg-white/[0.82] shadow-[0_30px_60px_-44px_rgba(12,12,14,0.5)]">
+      <div class="flex items-center gap-3.5 border-b border-ink/[0.08] px-4 pb-3 pt-3.5 text-[12px] font-semibold leading-none">
+        <span class="text-ink">Layers</span>
+        <span class="font-medium text-ink/65">FAQ</span>
+        <span class="ml-auto font-mono text-[10px] font-medium leading-none text-ink/65">
+          {QUESTIONS.length} items</span
+        >
+      </div>
+
+      <div id="faq-list">
+        {QUESTIONS.map((item, i) => (
+          <div data-faq-row class={`border-b border-ink/[0.06] last:border-b-0 ${i === 0 ? "on" : ""}`}>
+            <button
+              type="button"
+              data-faq-toggle
+              aria-expanded={i === 0 ? "true" : "false"}
+              class={`flex w-full cursor-pointer items-center gap-2.5 border-0 bg-transparent p-4 text-left text-[16px] font-medium leading-[1.3] tracking-[-0.02em] transition-[background,color] duration-200 hover:bg-ink/[0.03] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent min-[641px]:text-[18px] ${i === 0 ? "bg-accent/[0.07] text-accent" : "text-ink"}`}
+            >
+              <svg data-faq-chevron viewBox="0 0 10 10" aria-hidden="true" width="10" height="10" class={`shrink-0 transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${i === 0 ? "rotate-90" : ""}`}>
+                <path d="M3 1.5 7 5 3 8.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+              </svg>
+              <span class="flex-1">{item.question}</span>
+            </button>
+            <div
+              data-faq-answer
+              class={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${i === 0 ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+            >
+              <div class="overflow-hidden">
+                <p class="mb-[18px] ml-11 mr-4 max-w-[620px] border-l-[1.5px] border-accent/[0.33] pl-4 text-[16px] font-normal leading-[1.55] text-ink/72">
+                  {item.answer}
+                  {item.link && (
+                    <>
+                      {" "}
+                      <ArrowLink href={item.link.href} label={item.link.label} tone="accent" />
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initFaq() {
+  const list = document.getElementById("faq-list");
+  if (list) {
+    const rows = Array.from(list.querySelectorAll("[data-faq-row]"));
+
+    function paint(index) {
+      rows.forEach((r, j) => {
+        const open = j === index;
+        const b = r.querySelector("[data-faq-toggle]");
+        const a = r.querySelector("[data-faq-answer]");
+        const chev = r.querySelector("[data-faq-chevron]");
+        r.classList.toggle("on", open);
+        b?.setAttribute("aria-expanded", String(open));
+        b?.classList.toggle("bg-accent/[0.07]", open);
+        b?.classList.toggle("text-accent", open);
+        b?.classList.toggle("text-ink", !open);
+        a?.classList.toggle("grid-rows-[1fr]", open);
+        a?.classList.toggle("grid-rows-[0fr]", !open);
+        chev?.classList.toggle("rotate-90", open);
+      });
+    }
+
+    let current = 0;
+    rows.forEach((row, i) => {
+      const button = row.querySelector("[data-faq-toggle]");
+      button?.addEventListener("click", () => {
+        const isOpen = row.classList.contains("on");
+        current = isOpen ? -1 : i;
+        paint(current);
+      });
+    });
+
+    // Scroll-driven: at the top the first question is open, and as the
+    // section scrolls through the viewport each question opens in turn
+    // (closing the previous one) — same scroll-progress technique as the
+    // Process section (row's own position through the viewport, remapped
+    // over a [0.3, 0.72] window, one step per item).
+    const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+    let rafId = 0;
+
+    function computeScrollIndex() {
+      const r = list.getBoundingClientRect();
+      const vh = window.innerHeight || 900;
+      const raw = (vh - r.top) / (vh + r.height);
+      const remapped = clamp((clamp(raw) - 0.3) / (0.72 - 0.3));
+      return Math.min(rows.length - 1, Math.max(0, Math.floor(remapped * rows.length)));
+    }
+
+    function onScroll() {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        const next = computeScrollIndex();
+        if (next !== current) {
+          current = next;
+          paint(current);
+        }
+      });
+    }
+
+    current = computeScrollIndex();
+    paint(current);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  }
+  }
+
+  // See Services.astro's initServices for why this needs `astro:page-load`
+  // instead of running once at parse time.
+  document.addEventListener("astro:page-load", initFaq);
+</script>

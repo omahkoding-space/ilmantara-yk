@@ -1,0 +1,453 @@
+---
+import GlyphIcon from "../components/GlyphIcon.astro";
+import Layout from "./Layout.astro";
+import ArrowLink from "../components/ArrowLink.astro";
+import ArrowRow from "../components/ArrowRow.astro";
+import FigmaPanel from "../components/figma/FigmaPanel.astro";
+import SelectionFrame from "../components/figma/SelectionFrame.astro";
+import Img from "../components/Img.astro";
+import { WHATSAPP_LINK } from "../lib/site";
+
+export type ServiceFaq = { q: string; a: string; link?: { label: string; href: string } };
+
+const {
+  title,
+  description,
+  path,
+  h1,
+  intro = [] as string[],
+  image = "/images/at-the-desk.webp",
+  imageAlt = "",
+  whyTitle,
+  whyPoints = [] as string[],
+  offeringsTitle,
+  offerings = [] as { title: string; desc: string }[],
+  packagesTitle,
+  packagesIntro = "",
+  startingFrom = "",
+  packages = [] as { name: string; desc: string; features: string[] }[],
+  processTitle = "Proses Pengerjaan",
+  faqs = [] as ServiceFaq[],
+  faqTitle = "Pertanyaan Umum",
+  portfolioTitle = "",
+  portfolioNote = "",
+  portfolio = [] as { title: string; desc: string; href: string; img: string; imgAlt: string }[],
+  related = [] as { label: string; href: string }[],
+} = Astro.props;
+
+const STEPS = [
+  { n: "1", t: "Konsultasi (minggu 1)", d: "Ceritakan kebutuhan Anda lewat WhatsApp atau email. Kami gali target, materi, dan batas waktu." },
+  { n: "2", t: "Perencanaan & Estimasi (minggu 1–2)", d: "Lingkup, struktur halaman, dan estimasi harga tetap tertulis sebelum mulai." },
+  { n: "3", t: "Desain & Pengembangan (minggu 2–6)", d: "Desain, pembangunan, dan pengujian. Anda melihat demo progres tiap tahap." },
+  { n: "4", t: "Peluncuran & Dukungan (minggu 6+)", d: "Rilis, cek SEO dasar dan kecepatan, plus panduan edit sendiri." },
+];
+
+const faqSchema = faqs.length
+  ? [
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+    ]
+  : [];
+
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<Layout
+  path={path}
+  lang="id"
+  title={title}
+  description={description}
+  image={image}
+  alternates={[
+    { hreflang: "id", href: path },
+    { hreflang: "x-default", href: path },
+  ]}
+  jsonLd={faqSchema}
+>
+  <div class="relative overflow-hidden bg-paper text-ink">
+    <!-- Figma canvas: dotted grid over the paper background -->
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 opacity-[.55]"
+      style="background-image: radial-gradient(circle at 1px 1px, rgba(12,12,14,0.16) 1px, transparent 1.2px); background-size: 24px 24px;"
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-[1312px] px-5 pb-20 pt-[120px] sm:px-8 md:pt-[150px] lg:px-16">
+      <!-- Breadcrumb: canvas file label -->
+      <div class="flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase leading-none tracking-[0.05em] text-ink/65">
+        <span class="text-accent" aria-hidden="true">#</span>
+        <a href="/#services" class="hover:text-accent">Layanan</a>
+        <span class="opacity-50">/</span>
+        <span class="text-ink">{h1}</span>
+        <span class="ml-auto hidden text-ink/65 sm:inline">Ilmantara — Desain</span>
+      </div>
+
+      <!-- Hero: a selected artboard -->
+      <div class="relative mt-[18px]">   
+        <h1 class="max-w-[860px] text-balance text-[40px] font-semibold leading-[1.02] tracking-[-0.04em] md:text-[60px]">
+          {h1}
+        </h1>
+        <div class="mt-6 max-w-[720px] space-y-4 text-[18px] leading-[1.6] text-ink/75">
+          {intro.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href={WHATSAPP_LINK}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex h-12 items-center gap-2 rounded-[10px] bg-ink px-5 text-[15px] font-medium text-white transition-all duration-300 hover:-translate-y-0.5"
+          >
+            Konsultasi Gratis via WhatsApp
+          </a>
+          <a
+            href="/contact/"
+            class="inline-flex h-12 items-center gap-2 rounded-[10px] border border-ink/15 bg-white px-5 text-[15px] font-medium transition-all duration-300 hover:-translate-y-0.5"
+          >
+            Hubungi Kami
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero image: selected frame with handles + dimension chip -->
+      <figure class="relative mt-12">
+        <div class="mb-2.5 flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none text-accent">
+          <GlyphIcon name="diamond" />
+          <span>Gambar Utama</span>
+          <span class="ml-auto text-ink/65">16 : 8</span>
+        </div>
+        <div class="relative">
+          <div class="overflow-hidden rounded-md border border-ink/10">
+            <Img src={image} alt={imageAlt} sizes="(min-width: 1312px) 1184px, 100vw" fetchpriority="high" class="aspect-[16/8] w-full object-cover" />
+          </div>
+          <SelectionFrame label="1440 × 720" />
+        </div>
+      </figure>
+
+      <FigmaPanel frame="Mengapa" meta={`${whyPoints.length} lapisan`} tabs={["Lapisan", "Aset"]} class="mt-16 md:mt-24">
+        <div class="p-4 md:p-5">
+          <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{whyTitle}</h2>
+          <div class="mt-4 grid gap-1 md:grid-cols-2 md:gap-x-2">
+          {
+            whyPoints.map((point, i) => (
+              <div
+                class:list={[
+                  "group flex items-start gap-2.5 rounded-md px-3 py-2.5 transition-colors duration-200 [@media(hover:hover)]:hover:bg-accent/[0.06]",
+                  i === 0 && "bg-accent/[0.06]",
+                ]}
+              >
+                <GlyphIcon
+                  name="diamond"
+                  class={`mt-[3px] font-mono text-[10px] leading-none ${i === 0 ? "text-accent" : "text-ink/35"}`}
+                />
+                <p class="text-[15px] leading-[1.55] text-ink/80 transition-colors duration-200 group-hover:text-ink">{point}</p>
+              </div>
+            ))
+          }
+          </div>
+        </div>
+      </FigmaPanel>
+
+      <FigmaPanel frame="Layanan" meta={`${offerings.length} komponen`} tabs={["Desain", "Prototipe"]} class="mt-16 md:mt-24">
+        <div class="p-4 md:p-5">
+          <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{offeringsTitle}</h2>
+          <div class="mt-5 grid gap-4 md:grid-cols-2">
+          {
+            offerings.map((offer, i) => (
+              <div class="relative rounded-lg border border-dashed border-accent/40 bg-white p-5 transition-colors duration-200 [@media(hover:hover)]:hover:border-accent/70">
+                <div class="mb-2.5 flex items-center gap-1.5 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.03em] text-accent">
+                  <GlyphIcon name="diamond" />
+                  <span>Komponen</span>
+                  <span class="ml-auto text-ink/65">({pad(i + 1)})</span>
+                </div>
+                <h3 class="text-[20px] font-semibold tracking-[-0.02em]">{offer.title}</h3>
+                <p class="mt-2 text-[15px] leading-[1.6] text-ink/70">{offer.desc}</p>
+              </div>
+            ))
+          }
+          </div>
+        </div>
+      </FigmaPanel>
+
+      <FigmaPanel frame="Paket" meta={`${packages.length} frame`} tabs={["Desain", "Variabel"]} class="mt-16 md:mt-24">
+        <div class="p-4 md:p-5">
+          <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{packagesTitle}</h2>
+          {packagesIntro && <p class="mt-3 max-w-[680px] text-[16px] leading-[1.6] text-ink/70">{packagesIntro}</p>}
+          {
+            startingFrom && (
+              <p class="mt-4 inline-flex items-center gap-2 rounded-[4px] bg-accent px-2.5 py-1.5 font-mono text-[12px] font-medium leading-none text-white">
+                <GlyphIcon name="diamond" />Mulai dari {startingFrom}
+              </p>
+            )
+          }
+          <div class="mt-6 grid gap-6 md:grid-cols-3 md:gap-5">
+            {
+              packages.map((pkg, i) => {
+                const selected = i === 1;
+                return (
+                  <div class="relative">
+                    <div class:list={["mb-2.5 flex items-center gap-1.5 font-mono text-[10px] font-medium leading-none", selected ? "text-accent" : "text-ink/65"]}>
+                      <GlyphIcon name="diamond" />
+                      <span>Frame</span>
+                      <span class="ml-auto">{pkg.name}</span>
+                    </div>
+                    <div
+                      class:list={[
+                        "flex h-full flex-col rounded-lg border bg-white p-5",
+                        selected ? "border-accent" : "border-dashed border-accent/40",
+                      ]}
+                    >
+                      <h3 class="text-[20px] font-semibold tracking-[-0.02em]">{pkg.name}</h3>
+                      <p class="mt-2 text-[15px] leading-[1.6] text-ink/70">{pkg.desc}</p>
+                      <ul class="mt-4 space-y-1">
+                        {pkg.features.map((f) => (
+                          <li class="flex items-center gap-2 rounded-md bg-ink/[0.04] px-2.5 py-2 text-[13px] font-medium">
+                            <i class="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"></i>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <ArrowRow href={WHATSAPP_LINK} external label="Minta estimasi" class="mt-5" />
+                    </div>
+                    {selected && <SelectionFrame />}
+                  </div>
+                );
+              })
+            }
+          </div>
+        </div>
+      </FigmaPanel>
+
+      {
+        portfolio.length > 0 && (
+          <FigmaPanel frame="Portofolio" meta={`${portfolio.length} aset`} tabs={["Aset"]} class="mt-16 md:mt-24">
+            <div class="p-4 md:p-5">
+              <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{portfolioTitle}</h2>
+              {portfolioNote && <p class="mt-3 max-w-[680px] text-[16px] leading-[1.6] text-ink/70">{portfolioNote}</p>}
+              <div class="mt-5 grid gap-5 md:grid-cols-2">
+                {portfolio.map((item) => (
+                  <a href={item.href} class="group block">
+                    <div class="relative">
+                      <div class="overflow-hidden rounded-md border border-ink/10">
+                        <Img
+                          src={item.img}
+                          alt={item.imgAlt}
+                          sizes="(min-width: 768px) 48vw, 100vw"
+                          loading="lazy"
+                          class="aspect-[16/9] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    </div>
+                    <h3 class="mt-3 text-[18px] font-semibold tracking-[-0.02em] transition-colors group-hover:text-accent">{item.title}</h3>
+                    <p class="mt-1.5 text-[14px] leading-[1.6] text-ink/60">{item.desc}</p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </FigmaPanel>
+        )
+      }
+
+      <FigmaPanel frame="Proses" meta={`${STEPS.length} langkah`} tabs={["Prototipe", "Alur"]} class="mt-16 md:mt-24">
+        <div class="p-4 md:p-5">
+          <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{processTitle}</h2>
+          <ol class="mt-4 grid gap-1 md:grid-cols-2 md:gap-x-2">
+          {
+            STEPS.map((step) => (
+              <li class="group flex items-start gap-3 rounded-md px-3 py-3 transition-colors duration-200 [@media(hover:hover)]:hover:bg-accent/[0.06]">
+                <span
+                  class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md bg-ink/[.05] font-mono text-[11px] font-medium leading-none text-ink/60 transition-colors duration-200 group-hover:bg-accent group-hover:text-white"
+                  aria-hidden="true"
+                >
+                  {step.n}
+                </span>
+                <div>
+                  <h3 class="text-[16px] font-semibold leading-snug tracking-[-0.01em]">{step.t}</h3>
+                  <p class="mt-1.5 text-[14px] leading-[1.6] text-ink/65">{step.d}</p>
+                </div>
+              </li>
+            ))
+          }
+          </ol>
+        </div>
+      </FigmaPanel>
+
+      {
+        faqs.length > 0 && (
+          <FigmaPanel frame="Tanya Jawab" meta={`${faqs.length} item`} tabs={["Lapisan", "Tanya Jawab"]} class="mt-16 md:mt-24">
+            <div class="p-4 md:p-5 md:pb-1">
+              <h2 class="max-w-[760px] text-[24px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[32px]">{faqTitle}</h2>
+            </div>
+            <div data-service-faq>
+              {faqs.map((f, i) => (
+                <div data-faq-row class={`border-b border-ink/[0.06] last:border-b-0 ${i === 0 ? "on" : ""}`}>
+                  <button
+                    type="button"
+                    data-faq-toggle
+                    aria-expanded={i === 0 ? "true" : "false"}
+                    class={`flex w-full cursor-pointer items-center gap-2.5 border-0 bg-transparent p-4 text-left text-[16px] font-medium leading-[1.3] tracking-[-0.02em] transition-[background,color] duration-200 hover:bg-ink/[0.03] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent min-[641px]:text-[18px] ${i === 0 ? "bg-accent/[0.07] text-accent" : "text-ink"}`}
+                  >
+                    <svg
+                      data-faq-chevron
+                      viewBox="0 0 10 10"
+                      aria-hidden="true"
+                      width="10"
+                      height="10"
+                      class={`shrink-0 transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${i === 0 ? "rotate-90" : ""}`}
+                    >
+                      <path d="M3 1.5 7 5 3 8.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                    <span class="flex-1">{f.q}</span>
+                  </button>
+                  <div
+                    data-faq-answer
+                    class={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${i === 0 ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                  >
+                    <div class="overflow-hidden">
+                      <p class="mb-[18px] ml-11 mr-4 max-w-[620px] border-l-[1.5px] border-accent/[0.33] pl-4 text-[16px] font-normal leading-[1.55] text-ink/72">
+                        {f.a}
+                        {f.link && (
+                          <>
+                            {" "}
+                            <ArrowLink href={f.link.href} label={f.link.label} tone="accent" />
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </FigmaPanel>
+        )
+      }
+
+      {
+        related.length > 0 && (
+          <nav aria-label="Layanan terkait" class="mt-16 md:mt-24">
+            <div class="mb-3 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+              <span class="text-accent" aria-hidden="true">#</span>
+              <span class="text-ink/70">Aset Tertaut</span>
+              <span class="ml-auto text-ink/65">{related.length} terkait</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {related.map((r) => (
+                <a
+                  href={r.href}
+                  class="inline-flex items-center gap-2 rounded-md border border-ink/[0.12] bg-white px-3.5 py-2.5 font-mono text-[13px] font-medium transition-colors hover:border-accent hover:text-accent"
+                >
+                  <GlyphIcon name="diamond" class="text-accent" />
+                  {r.label}
+                </a>
+              ))}
+            </div>
+          </nav>
+        )
+      }
+
+      <section class="mt-16 md:mt-24">
+        <div class="mb-3 flex items-center gap-2 font-mono text-[11px] font-medium leading-none">
+          <span class="text-accent" aria-hidden="true">#</span>
+          <span class="text-ink/70">Ajakan</span>
+          <span class="ml-auto text-ink/65">Frame · 1440</span>
+        </div>
+        <div class="relative overflow-hidden rounded-xl bg-ink p-8 text-white md:p-12">
+          <h2 class="max-w-[640px] text-[32px] font-semibold leading-[1.05] tracking-[-0.03em] md:text-[44px]">
+            Siap punya website yang mendatangkan pelanggan?
+          </h2>
+          <p class="mt-4 max-w-[560px] text-[17px] leading-[1.6] text-white/70">
+            Ceritakan kebutuhan bisnis Anda. Kami balas dalam 1 hari kerja dengan ide awal dan estimasi harga.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a
+              href={WHATSAPP_LINK}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex h-12 items-center rounded-[10px] bg-white px-5 text-[15px] font-medium text-ink transition-all duration-300 hover:-translate-y-0.5"
+            >
+              Konsultasi Gratis via WhatsApp
+            </a>
+            <a
+              href="/contact/"
+              class="inline-flex h-12 items-center rounded-[10px] border border-white/25 px-5 text-[15px] font-medium text-white transition-all duration-300 hover:-translate-y-0.5"
+            >
+              Hubungi Kami
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // FAQ layanan: gaya sama seperti FAQ beranda. Saat di-scroll, tiap
+  // pertanyaan terbuka bergantian (menutup yang sebelumnya) mengikuti
+  // progres scroll — satu langkah per item. Klik manual juga didukung.
+  document.querySelectorAll("[data-service-faq]").forEach((list) => {
+    const rows = Array.from(list.querySelectorAll("[data-faq-row]"));
+    if (!rows.length) return;
+
+    function paint(index) {
+      rows.forEach((r, j) => {
+        const open = j === index;
+        const b = r.querySelector("[data-faq-toggle]");
+        const a = r.querySelector("[data-faq-answer]");
+        const chev = r.querySelector("[data-faq-chevron]");
+        r.classList.toggle("on", open);
+        b?.setAttribute("aria-expanded", String(open));
+        b?.classList.toggle("bg-accent/[0.07]", open);
+        b?.classList.toggle("text-accent", open);
+        b?.classList.toggle("text-ink", !open);
+        a?.classList.toggle("grid-rows-[1fr]", open);
+        a?.classList.toggle("grid-rows-[0fr]", !open);
+        chev?.classList.toggle("rotate-90", open);
+      });
+    }
+
+    let current = 0;
+    rows.forEach((row, i) => {
+      const button = row.querySelector("[data-faq-toggle]");
+      button?.addEventListener("click", () => {
+        const isOpen = row.classList.contains("on");
+        current = isOpen ? -1 : i;
+        paint(current);
+      });
+    });
+
+    const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+    let rafId = 0;
+
+    function computeScrollIndex() {
+      const r = list.getBoundingClientRect();
+      const vh = window.innerHeight || 900;
+      const raw = (vh - r.top) / (vh + r.height);
+      const remapped = clamp((clamp(raw) - 0.3) / (0.72 - 0.3));
+      return Math.min(rows.length - 1, Math.max(0, Math.floor(remapped * rows.length)));
+    }
+
+    function onScroll() {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        const next = computeScrollIndex();
+        if (next !== current) {
+          current = next;
+          paint(current);
+        }
+      });
+    }
+
+    current = computeScrollIndex();
+    paint(current);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  });
+</script>
